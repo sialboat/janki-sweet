@@ -3,16 +3,16 @@ Resources for learning more about computer science, electrical engineering, soft
 
 ## Books
 Copy to the `~/resources` folder, log them below;
+Currently the programming language books I've attached focus on C and C++. It may be a good idea to search for more books related to other languages such as Python, Rust, Java, possibly others (Zig, Go, JavaScript, etc.), if books are the preferred reference for programming.
 
-Signal Processing
+### Signal Processing
 - acoustics for musicians and artists (Miller Puckette)
 - Electronic Music Theory (Miller Puckette)
 - Beginner's Guide to Audio Plugin Development (The Audio Programmer)
 - Designing Audio Effect Plugins in C++ (Will C. Pirkle)
 - Digital Audio Effects 2nd ed. (DAFX)
-- 
 
-Programming Languages (find books for Python, C, C++, Rust, maybe Java)
+### Programming Languages (find books for Python, C, C++, Rust, maybe Java)
 - The C Programming Language
 - The C++ Programming Language
 - Practical C++ Programming
@@ -33,8 +33,18 @@ Programming Languages (find books for Python, C, C++, Rust, maybe Java)
 - [JUCE Template](https://github.com/sudara/pamplejuce)
 - [Institute for Computer Music and Sound Technology](https://www.zhdk.ch/en/research/icst/software-downloads-5379)
 
-
 ## NYU Classes
 - ECE-UY Signals and Systems (Tandon)
+    - FDST & DST with a math prereq at Tandon
 - FDST / DST (MPATE)
+    - Music Tech Grad Class
 - CS201 (Comp. Systems Org) & CS202 (Operating Systems)
+    - low-level programming experience, multithreadding and memory management
+<!-- 
+product design
+embedded systems tandon class
+communications tandon class
+DSP-Lab Tandon Class
+Mason Mann's Adv. Computer Music
+Machine Learning, Probability and Statitics and Stochastic Processes
+ -->
