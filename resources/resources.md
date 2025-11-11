@@ -32,6 +32,10 @@ Currently the programming language books I've attached focus on C and C++. It ma
 - [JUCE Tutorials](https://juce.com/)
 - [JUCE Template](https://github.com/sudara/pamplejuce)
 - [Institute for Computer Music and Sound Technology](https://www.zhdk.ch/en/research/icst/software-downloads-5379)
+- [DIY DSP](https://www.youtube.com/diydsp)
+- [Audio EQ Cookbook](https://www.w3.org/TR/audio-eq-cookbook/)
+    - [another one!](https://webaudio.github.io/Audio-EQ-Cookbook/audio-eq-cookbook.html)
+- [Mason Mann's Adv. Computer Music Notes](https://masonmann.online/2047/resources/)
 
 ## NYU Classes
 - ECE-UY Signals and Systems (Tandon)
