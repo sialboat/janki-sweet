@@ -10,8 +10,12 @@
 ## Dealbreakers:
 - Are our names on it (credit)?
 - Will it become anything (opportunity to build)?
+- NDA?
 
 ## Ideas:
+
+### Change in Listening Environments
+"Concert mode" or "studio mode" for consumers to listen in with adjusted EQ and reverb settings to emulate that listening environment within their audio devices.
 
 ### "Life" as a Sound Design Controller
 Software framework for translating the world into music protocols.
