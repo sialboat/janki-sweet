@@ -7,6 +7,10 @@
 - It gets our asses moving
 - TBD...
 
+## Dealbreakers:
+- Are our names on it (credit)?
+- Will it become a product (opportunity to build)?
+
 ## Ideas:
 
 ### "Life" as a Sound Design Controller
