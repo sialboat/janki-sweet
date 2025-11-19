@@ -1,6 +1,12 @@
 # Sony Brainstorm
 ---
 
+## Our Motives/Goal:
+- "Build a relationship" with Sony
+- Project for our portfolio
+- It gets our asses moving
+- TBD...
+
 ## Ideas:
 
 ### "Life" as a Sound Design Controller
