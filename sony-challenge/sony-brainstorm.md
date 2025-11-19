@@ -9,7 +9,7 @@
 
 ## Dealbreakers:
 - Are our names on it (credit)?
-- Will it become a product (opportunity to build)?
+- Will it become anything (opportunity to build)?
 
 ## Ideas:
 
