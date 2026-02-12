@@ -37,7 +37,6 @@ class DelayLine
     void setCapacity(size_t newCapacity);               // sets capacity to a larger length and zeros the buffer.
 
     float read();                                       // read at readIndex
-    float readAhead(float i);                           // read i indices ahead readIndex
     float readBehind(float i);                          // read i indices behind readIndex
     float readAt(float i);                              // read at index i
 

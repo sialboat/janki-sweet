@@ -24,10 +24,10 @@ float DelayLine::read()
 
 }
 
-float DelayLine::readAhead(float i)
-{
-    // this may not technically be possible
-}
+// float DelayLine::readAhead(float i)
+// {
+//     // this may not technically be possible
+// }
 
 float DelayLine::readBehind(float i)
 {
