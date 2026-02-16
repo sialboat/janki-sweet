@@ -16,7 +16,7 @@
 class BaseParamWrapper
 {
     public:
-    virtual void prepareToPlay(double sampleRate, double duration - 0.05) noexcept = 0;
+    virtual void prepareToPlay(double sampleRate, double duration = 0.05) noexcept = 0;
     virtual void reset() noexcept = 0;
     virtual void update() noexcept = 0;
     virtual void smoothen() noexcept = 0;

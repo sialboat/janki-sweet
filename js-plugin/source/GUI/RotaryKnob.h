@@ -21,5 +21,4 @@ class RotaryKnob : public juce::Component
     int knobHeight = 0;
     int textHeight = 0;
     int width = 0;
-
 }

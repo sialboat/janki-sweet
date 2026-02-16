@@ -87,6 +87,8 @@ target_sources(JANKI_SWEET
         source/PluginEditor.cpp
 )
 
+# add_subdirectory(le-janky)
+
 # target_include_directories(JANKI_SWEET
 #     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/source
 # )
