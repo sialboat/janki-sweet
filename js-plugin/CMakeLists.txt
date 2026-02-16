@@ -74,8 +74,8 @@ juce_generate_juce_header(JANKI_SWEET)
 
 # Apparently this lets you add target sources without manually adding every one of them
 # file(GLOB_RECURSE SourceFiles CONFIGURE_DEPENDS
-#     "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp"
-#     "${CMAKE_CURRENT_SOURCE_DIR}/source/*.h"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/source/*.h"
 # )
 
 target_sources(JANKI_SWEET
