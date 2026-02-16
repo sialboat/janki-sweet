@@ -7,6 +7,12 @@
 /* 
     Base buffer class that potentially hopefully transfers
     well across other DSP primitives
+
+    Some things I learned about writing this class:
+    - the explicit keyword tells C++ that this is the constructor that it
+      must use when creating a buffer object. 
+    - T& operator[] allows you to rewrite the behavior of the arr[i] operation.
+        - you can do this with other operators as well (<, >, <=, >=, ++, +=, etc.)
 */
 template <typename TYPE>
 class buffer

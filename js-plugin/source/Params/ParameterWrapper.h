@@ -5,6 +5,14 @@
 
 #include <JuceHeader.h>
 
+/*
+    ParameterWrapper.h
+
+    Header file that contains parameter wrappers for every kind of parameter. This allows for all parameters 
+    to be created and added to the APVTS on one line, and for all parameters within an APVTS to be iterated
+    on in a loop.
+*/
+
 class BaseParamWrapper
 {
     public:

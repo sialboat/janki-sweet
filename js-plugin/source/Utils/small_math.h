@@ -9,9 +9,17 @@
     small helper math functions to make computations easier.
 */
 
-// Binomial coefficient calculation that is allegedly far more efficient than
-// implementing the elementary formula provided
-// https://arxiv.org/html/2312.00301v2
+/*
+    binom(n, k)
+
+    Binomial coefficient calculation that is allegedly far more efficient than
+    implementing the elementary formula provided. Source:
+    https://arxiv.org/html/2312.00301v2
+
+    @param n: integer representing the "n" values of a binomial coefficient
+    @param k: integer representing the "k" values of a binomial coefficient
+    @return the integer value of a binomial coefficient
+*/
 inline int binom(int n, int k)
 {
     int k = std::min(k, n - k);

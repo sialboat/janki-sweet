@@ -4,9 +4,16 @@
 DelayLine::DelayLine() : buffer(64), readIndex(0), writeIndex(0), size(buffer.size()),
     mode(INTERPOLATION_MODE::LAGRANGE) {}
 
-DelayLine::DelayLine(size_t _size) : buffer(_size), readIndex(0), writeIndex(0), 
-    size(buffer.size()), mode(m) {}
+DelayLine::DelayLine(size_t _size, float alpha = 0.5f, INTERPOLATION_MODE mode = INTERPOLATION_MODE::LAGRANGE) 
+    : buffer(_size), readIndex(0), writeIndex(0), size(buffer.size()), mode(m) {}
 
+/*
+    setCapacity
+
+    Writes a new unsigned integer newSize to the buffer only if the current
+    buffer is less than the requested new size. If newSize > the current
+    size, we copy all the contents of the current array to a larger array.
+*/
 void DelayLine::setCapacity(size_t newSize)
 {
     jassert(newSize > 0);
@@ -19,27 +26,34 @@ void DelayLine::setCapacity(size_t newSize)
     }
 }
 
+/*
+    Reads a sample at writeIndex without any fractional delay.
+    returns the interpolated floating point sample.
+*/
 float DelayLine::read()
 {
-
+    float out = interpolate(writeIndex);
+    return out;
 }
 
-// float DelayLine::readAhead(float i)
-// {
-//     // this may not technically be possible
-// }
+/*
+    Reads a sample i indices behind writeIndex. Because i is
+    a floating point argument, fractional delays is allowed.
 
+    Returns the interpolated floating point sample.
+*/
 float DelayLine::readBehind(float i)
 {
-
+    float out = interpolate(writeIndex - i);
+    return out;
 }
 
-float DelayLine::readAt(float i)
-{
+/*
+    Writes a floating point sample to writeIndex and increments
+    writeIndex. Wraps around if the index is out of bounds.
 
-}
-
-
+    @param in - the sample to write.
+*/
 void DelayLine::write(float in)
 {
     writeAt(in, writeIndex++);
@@ -48,6 +62,14 @@ void DelayLine::write(float in)
     // writeIndex = (writeIndex + 1) % buffer.size();
 }
 
+/*
+    Writes a floating point sample to index writeIndex + i and
+    sets writeIndex to writeIndex + i. Wraps around if the index
+    is out of bounds.
+
+    @param in - the sample to write
+    @param i - the number of indices to jump forward.
+*/
 void DelayLine::writeAhead(float in, size_t i)
 {
     writeAt(in, writeIndex + i);
@@ -57,11 +79,26 @@ void DelayLine::writeAhead(float in, size_t i)
     // writeIndex = newWrite;
 }
 
+/*
+    Writes a floating point sample to index writeIndex - i and
+    sets writeIndex to writeIndex - i. Wraps around if the index
+    is out of bounds.
+
+    @param in - the sample to write
+    @param i - the number of indices to jump backwards.
+*/
 void DelayLine::writeBehind(float in, size_t i)
 {
     writeAt(in, writeIndex - i);
 }
 
+/*
+    Writes a floating point sample to the index i and sets writeIndex
+    to said index i. Folds the given index if the index is out of bounds.
+
+    @param in - the sample to write
+    @param i - the index to write the sample.
+*/
 void DelayLine::writeAt(float in, int i)
 {
     jassert(buffer.size() > 0);
@@ -70,15 +107,26 @@ void DelayLine::writeAt(float in, int i)
     buffer[writeIndex] = in;
 }
 
+/*
+    Zeroes the buffer and resets writeIndex.
+*/
 void DelayLine::reset()
 {
-    writeIndex = buffer.size() - 1;
-    for(size_t i = 0; i < buffer.size(); i++) {
+    writeIndex = size - 1;
+    for(size_t i = 0; i < size; i++) {
         buffer[i] = 0.0f;
     }
 }
 
+/*
+    Reads a sample at floating point index "at" and computes the interpolated
+    sample. Returns the interpolated sample based on the given algorithm.
+    Note that since "at" is a floating point, index values at fractional
+    indices can be computed.
 
+    @param at - the sample
+    returns an interpolated sample.
+*/
 float DelayLine::interpolate(float at = 0.0f)
 {
     switch(mode)
@@ -97,27 +145,56 @@ float DelayLine::interpolate(float at = 0.0f)
 // but that's probably not going to happen with respect to index
 // modifications
 
+/*
+    Nearest Neighbor interpolation algorithm
 
-float DelayLine::nearest_neighbors(float at = 0.0f)
+    Returns the floating point sample that is closest to writeIndex - delay. 
+
+    @param delay - the index value to be read from. Methods within this object
+           that implement this pass a writeIndex - n into this parameter.
+    return nearest neighbors interpolated floating point sample
+*/
+float DelayLine::nearest_neighbors(float delay = 0.0f)
 {
-    int index = writeIndex - (int)std::round(at);
+    int index = writeIndex - (int)std::round(delay);
     if(index < 0) index += size; // this is faster than modulo
     return buffer[size_t(index)];
 }
 
+/*
+    Linear interpolation algorithm
+
+    Constructs a line between two samples (at writeIndex - delay and writeIndex
+    - delay - 1) and estimates the value at the fractional index using a linear
+    function / line.
+
+    @param delay - the index value to be read from. Methods within this object
+           that implement this pass a writeIndex - n into this parameter.
+    return the linearly interpolated floating point sample
+*/
 float DelayLine::linear(float delay = 0.0f)
 {
     int base = static_cast<int>(delay);
     float frac = delay - static_cast<float>(base);
 
-    size_t index1 = writeIndex + base;
+    size_t index1 = writeIndex - base;
     if(index1 < 0) index1 += size;
-    size_t index2 = index1 + 1;
+    size_t index2 = index1 - 1;
     if(index2 > size) index2 -= size;
 
     return (1 - frac) * buffer[index1] + (frac) * buffer[index2];
 }
 
+/*
+    Cubic (Catmull-Ron) interpolation algorithm
+
+    Fits a series of degree-3 polymonials through a given set of samples, resulting in
+    a smooth curve between samples. 
+
+    @param delay - the index value to be read from. Methods within this object
+           that implement this pass a writeIndex - n into this parameter.
+    return the cubic interpolated floating point sample
+*/
 float DelayLine::cubic(float delay = 0.0f)
 {
     int base = static_cast<int>(delay);
@@ -125,8 +202,8 @@ float DelayLine::cubic(float delay = 0.0f)
     float frac2 = frac * frac;
     float frac3 = frac2 * frac;
 
-    int readIndices[4];
-    float samples[4];
+    int readIndices[4] = {0};
+    float samples[4] = {0.0f};
     for(size_t i = 0; i < 4; i++) {
         readIndices[i] = writeIndex - base + i - 1;
         if(readIndices[i] < 0) readIndices[i] += size;
@@ -210,7 +287,9 @@ float DelayLine::lagrange(float delay = 0.0f)
 }
 
 /*
-    Hermite implementation (Cubic Hermite Spline), a generalization of lagrange interpolation
+    Hermite implementation (Cubic Hermite Spline)
+    
+    a generalization of lagrange interpolation
     It generalizes Lagrange by including the derivatives of p0, p1, and p2 alongside the values p0, p1, p2.
     As a result, it makes for a really good real-time interpolation for real-time computation.
     Found initially in a section of TAP's "Beginner Audio Plugin book" or whatever it was called.
