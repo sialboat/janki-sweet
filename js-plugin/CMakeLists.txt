@@ -80,6 +80,7 @@ juce_generate_juce_header(JANKI_SWEET)
 
 target_sources(JANKI_SWEET
     PRIVATE
+        # ${CMAKE_CURRENT_SOURCE_DIR}
         # ${SourceFiles}
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
@@ -87,8 +88,10 @@ target_sources(JANKI_SWEET
         source/PluginEditor.cpp
 )
 
-# add_subdirectory(le-janky)
-
+add_subdirectory(source/Utils)
+add_subdirectory(source/le-janky)
+add_subdirectory(source/GUI)
+add_subdirectory(source/Params)
 # target_include_directories(JANKI_SWEET
 #     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/source
 # )

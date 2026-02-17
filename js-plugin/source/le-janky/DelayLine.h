@@ -4,9 +4,10 @@
 #ifndef DELAY_LINE_H
 #define DELAY_LINE_H
 
-#include "le-janky/Buffer.h"
-#include "Utils/small_math.h"
+#include "Buffer.h"
+#include "small_math.h"
 #include <algorithm>
+#include <cassert>
 
 enum class INTERPOLATION_MODE {
     NEAREST_NEIGHBORS = 0,
@@ -32,16 +33,14 @@ enum class INTERPOLATION_MODE {
 class DelayLine
 {
     public:
-    DelayLine(alpha = 0.5f);
-    DelayLine(size_t size, alpha = 0.5f, INTERPOLATION_MODE m = LAGRANGE);
+    DelayLine();
+    DelayLine(size_t size, INTERPOLATION_MODE m = INTERPOLATION_MODE::LAGRANGE);
 
     size_t getBufferLength() { return size; }
     size_t getReadIndex() { return readIndex; }
     size_t getWriteIndex() { return writeIndex; }
     void setReadIndex(size_t newIndex) { readIndex = newIndex; }
     void setWriteIndex(size_t newIndex) { writeIndex = newIndex; }
-    void setOverwriteable(bool n) { canOverwrite = n; }
-    bool isDataOverwritable() { return canOverwrite; }
 
     float getAlpha() { return alpha; }
     void setAlpha(float f) { alpha = f; }
@@ -50,12 +49,12 @@ class DelayLine
 
     float read();                                       // read at writeIndex
     float readBehind(float i);                          // read i indices behind writeIndex
-    float readRaw(size_t i = writeIndex);               // reads the value stored at writeIndex
+    float readRaw(size_t i);                            // reads the value stored at writeIndex
 
     void write(float in);                               // write in at writeIndex
     void writeAhead(float in, size_t i);                // write in i indices ahead writeIndex
     void writeBehind(float in, size_t i);               // write in i indices behind writeIndex
-    void writeAt(float in, size_t i);                   // write in at index i
+    void writeAt(float in, int i);                   // write in at index i
 
     void clear() { buffer.clear(); }                    // zero the buffer with buffer.clear();
     void reset();                                       // zero the buffer iteratively.
@@ -67,7 +66,7 @@ class DelayLine
     float cubic(float at = 0.0f);                       // cubic interpol;ation
     float lagrange(float at = 0.0f);                    // lagrange interpolation
     float hermite(float at = 0.0f);                     // hermite interpolation
-    float thiran(float at = 0.0f, int order);           // thiran allpass interpolation
+    float thiran(float at = 0.0f, int order = 1);           // thiran allpass interpolation
     // float thiran_1(float at = 0.0f);                 // first order thiran interpolation
 
     private:

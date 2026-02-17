@@ -22,9 +22,9 @@
 */
 inline int binom(int n, int k)
 {
-    int k = std::min(k, n - k);
+    int N = std::min(k, n - k);
     int out = 1;
-    for(size_t i = 0; i < k; i++) {
+    for(size_t i = 0; i < N; i++) {
         out = out * (n - i + 1);
         out = out / i;
     }

@@ -4,8 +4,8 @@
 DelayLine::DelayLine() : buffer(64), readIndex(0), writeIndex(0), size(buffer.size()),
     mode(INTERPOLATION_MODE::LAGRANGE) {}
 
-DelayLine::DelayLine(size_t _size, float alpha = 0.5f, INTERPOLATION_MODE mode = INTERPOLATION_MODE::LAGRANGE) 
-    : buffer(_size), readIndex(0), writeIndex(0), size(buffer.size()), mode(m) {}
+DelayLine::DelayLine(size_t _size, INTERPOLATION_MODE mode) 
+    : buffer(_size), readIndex(0), writeIndex(0), size(buffer.size()), mode(mode) {}
 
 /*
     setCapacity
@@ -16,7 +16,7 @@ DelayLine::DelayLine(size_t _size, float alpha = 0.5f, INTERPOLATION_MODE mode =
 */
 void DelayLine::setCapacity(size_t newSize)
 {
-    jassert(newSize > 0);
+    assert(newSize > 0);
 
     size_t paddedLength = newSize + 2;
 
@@ -101,9 +101,10 @@ void DelayLine::writeBehind(float in, size_t i)
 */
 void DelayLine::writeAt(float in, int i)
 {
-    jassert(buffer.size() > 0);
+    assert(size > 0);
 
-    writeIndex = i % buffer.size();
+    writeIndex = i + size;
+    if(writeIndex > size) writeIndex -= size;
     buffer[writeIndex] = in;
 }
 
@@ -127,16 +128,16 @@ void DelayLine::reset()
     @param at - the sample
     returns an interpolated sample.
 */
-float DelayLine::interpolate(float at = 0.0f)
+float DelayLine::interpolate(float at)
 {
     switch(mode)
     {
-        case NEAREST_NEIGHBORS:     return nearest_neighbors(at);
-        case LINEAR:                return linear(at);
-        case CUBIC:                 return cubic(at);
-        case LAGRANGE:              return lagrange(at);
-        case HERMITE:               return hermite(at);
-        case THIRAN:                return thiran(at);
+        case INTERPOLATION_MODE::NEAREST_NEIGHBORS:     return nearest_neighbors(at);
+        case INTERPOLATION_MODE::LINEAR:                return linear(at);
+        case INTERPOLATION_MODE::CUBIC:                 return cubic(at);
+        case INTERPOLATION_MODE::LAGRANGE:              return lagrange(at);
+        case INTERPOLATION_MODE::HERMITE:               return hermite(at);
+        case INTERPOLATION_MODE::THIRAN:                return thiran(at);
         default:                    return lagrange(at); // we shouldn't get here
     }
 }
@@ -154,7 +155,7 @@ float DelayLine::interpolate(float at = 0.0f)
            that implement this pass a writeIndex - n into this parameter.
     return nearest neighbors interpolated floating point sample
 */
-float DelayLine::nearest_neighbors(float delay = 0.0f)
+float DelayLine::nearest_neighbors(float delay)
 {
     int index = writeIndex - (int)std::round(delay);
     if(index < 0) index += size; // this is faster than modulo
@@ -172,7 +173,7 @@ float DelayLine::nearest_neighbors(float delay = 0.0f)
            that implement this pass a writeIndex - n into this parameter.
     return the linearly interpolated floating point sample
 */
-float DelayLine::linear(float delay = 0.0f)
+float DelayLine::linear(float delay)
 {
     int base = static_cast<int>(delay);
     float frac = delay - static_cast<float>(base);
@@ -195,10 +196,10 @@ float DelayLine::linear(float delay = 0.0f)
            that implement this pass a writeIndex - n into this parameter.
     return the cubic interpolated floating point sample
 */
-float DelayLine::cubic(float delay = 0.0f)
+float DelayLine::cubic(float delay)
 {
     int base = static_cast<int>(delay);
-    float frac = at - static_cast<float>(base);
+    float frac = delay - static_cast<float>(base);
     float frac2 = frac * frac;
     float frac3 = frac2 * frac;
 
@@ -256,8 +257,11 @@ float DelayLine::cubic(float delay = 0.0f)
    Referred to the "Barycentric Form" section of the Lagrange Polynomial Wikipedia Page
    https://en.wikipedia.org/wiki/Lagrange_polynomial
   */
-float DelayLine::lagrange(float delay = 0.0f)
+float DelayLine::lagrange(float delay)
 {
+    int intDelay = (int) delay;
+    float fraction = delay - intDelay;
+
     float w0, w1, w2;
     float x0 = 0.0f, x1 = -1.0f, x2 = -2.0f;
 
@@ -267,17 +271,17 @@ float DelayLine::lagrange(float delay = 0.0f)
     w2 = 1 / ((x2 - x0) * (x2 - x1));
 
     // calculate indices
-    size_t i0 = writeIndex - delay;
-    size_t i1 = i0 - 1;
-    size_t i2 = i0 - 2;
+    int i0 = writeIndex - intDelay;
+    int i1 = i0 - 1;
+    int i2 = i0 - 2;
     if(i0 < 0) i0 += size;
     if(i1 < 0) i1 += size;
     if(i2 < 0) i2 += size;
 
     // compute c1 and c2
-    c0 = w0 / (alpha - x0);
-    c1 = w1 / (alpha - x1);
-    c2 = w2 / (alpha - x2);
+    float c0 = w0 / (fraction - x0);
+    float c1 = w1 / (fraction - x1);
+    float c2 = w2 / (fraction - x2);
 
     // compute subcomponents
     float numerator = (c0 * buffer[i0]) + (c1 * buffer[i1]) + (c2 * buffer[i2]);
@@ -300,17 +304,20 @@ float DelayLine::lagrange(float delay = 0.0f)
     Referred to the "Interpolation on a single Unit Interval [0, 1]" section for this implementation on Wikipedia.
     https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Representations
   */
-float DelayLine::hermite(float at = 0.0f)
+float DelayLine::hermite(float delay)
 {
+    int intDelay = (int) delay;
+    float fraction = delay - fraction;
+
     // pre-compute power values of alpha
-    float a2 = alpha * alpha;
-    float a3 = alpha * alpha * alpha;
+    float a2 = fraction * fraction;
+    float a3 = fraction * fraction * fraction;
 
     // pre-compute index values
-    size_t i0 = writeIndex;
-    size_t i1 = i0 - 1;
-    size_t i2 = i0 - 2;
-    size_t i3 = i0 - 3;
+    int i0 = writeIndex - intDelay;
+    int i1 = i0 - 1;
+    int i2 = i0 - 2;
+    int i3 = i0 - 3;
     if(i1 < 0) i1 += size;
     if(i2 < 0) i2 += size;
     if(i3 < 0) i3 += size;
@@ -334,7 +341,7 @@ float DelayLine::hermite(float at = 0.0f)
 /*
     https://ccrma.stanford.edu/~jos/pasp/Thiran_Allpass_Interpolation_Matlab.html
 */
-float DelayLine::thiran(float delay = 0.0f, int order)
+float DelayLine::thiran(float delay, int order)
 {
     auto A = std::make_unique<float[]>(order);
     std::fill(A.get(), A.get() + order, 0.0f);
