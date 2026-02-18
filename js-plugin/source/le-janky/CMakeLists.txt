@@ -2,11 +2,13 @@ cmake_minimum_required(VERSION 3.22)
 
 set(LE_JANKY_SOURCES
     DelayLine.cpp
+    gain.cpp
 )
 
 set(LE_JANKY_HEADERS
     Buffer.h
     DelayLine.h
+    gain.h
 )
 
 add_library(LE_JANKY STATIC

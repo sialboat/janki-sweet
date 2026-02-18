@@ -59,6 +59,8 @@ class DelayLine
     void clear() { buffer.clear(); }                    // zero the buffer with buffer.clear();
     void reset();                                       // zero the buffer iteratively.
 
+    Buffer& getBuffer() { return buffer; }
+
     private:
     float interpolate(float at = 0.0f);                 // interpolateion algorithms at index at.
     float linear(float at = 0.0f);                      // linear interpolation
