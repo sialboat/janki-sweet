@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 set(UTILS_HEADERS
     small_math.h
+    Measurement.h
 )
 set(UTILS_SOURCES
 )
