@@ -16,7 +16,7 @@
 */
 
 enum class GAIN_TYPE {
-    LINEAR, DB_SPL, DB_FS FUNCTION
+    LINEAR, DB_SPL, DB_FS, FUNCTION
 };
 
 class gain
@@ -46,7 +46,7 @@ private: // we don't necessarily need to reveal these to the world
     float process_dbspl(float in);              // applies a decibel-scaling gain (dbSPL) to the incoming sample regardless of gain_type
     float process_dbfs(float in);               // applies a decibel-scaling gain (dbFS) to the incoming sample regardless of gain_type
     float lerp_gain_value();                    // linearly interpolates to the next gain value so we don't 
-    virtual float process_function(float in) = default;     // applies a custom function as gain to the incoming sample.
+    virtual float process_function(float in);   // applies a custom function as gain to the incoming sample.
 
 private:
     GAIN_TYPE gain_type;                // enum state that determines the function that will determine the gain

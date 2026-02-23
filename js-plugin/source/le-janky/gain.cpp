@@ -1,7 +1,7 @@
 #include "gain.h"
 
 gain::gain() : gain_type(GAIN_TYPE::DB_FS), ramp_value(100.0f), 
-    multiplier(1.0f), bitrate(DEFAULT_BITRATE);
+    multiplier(1.0f), bitrate(DEFAULT_BITRATE) {}
 
 gain::gain(GAIN_TYPE type, float multiplier) : gain_type(type), 
     ramp_value(100.0f), multiplier(1.0f), bitrate(DEFAULT_BITRATE) {}
@@ -17,7 +17,7 @@ float gain::process(float input)
         case GAIN_TYPE::DB_SPL: return process_dbspl(input);
         case GAIN_TYPE::DB_FS: return process_dbfs(input);
         case GAIN_TYPE::FUNCTION: return process_function(input);
-        default: return process_decibel(input);
+        default: return process_dbfs(input);
     }
 }
 
@@ -66,7 +66,7 @@ float gain::lerp_gain_value()
     want to define their gain value by some means, they have the ability to override
     this function freely. 
 */
-virtual float gain::process_function(float in)
+float gain::process_function(float in)
 {
-    return process_decibel(in);
+    return process_dbfs(in);
 }

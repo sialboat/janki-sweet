@@ -56,7 +56,7 @@ juce_add_plugin(JANKI_SWEET
     PLUGIN_MANUFACTURER_CODE Juce               # A four-character manufacturer id with at least one upper-case character
     PLUGIN_CODE JkSw                            # A unique four-character plugin id with exactly one upper-case character
                                                 # GarageBand 10.3 requires the first letter to be upper-case, and the remaining letters to be lower-case
-    FORMATS VST3                             # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
+    FORMATS VST3 AU                             # The formats to build. Other valid formats are: AAX Unity VST AU AUv3
     PRODUCT_NAME "Janki Sweet")                 # The name of the final executable, which can differ from the target name
 
 # `juce_generate_juce_header` will create a JuceHeader.h for a given target, which will be generated
