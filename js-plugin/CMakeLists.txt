@@ -84,8 +84,10 @@ target_sources(JANKI_SWEET
         # ${SourceFiles}
         source/PluginEditor.cpp
         source/PluginProcessor.cpp
+        source/PluginProcessor.h
         source/PluginEditor.h
-        source/PluginEditor.cpp
+        source/GUI/RotaryKnob.cpp
+        source/GUI/RotaryKnob.h
 )
 
 add_subdirectory(source/Utils)

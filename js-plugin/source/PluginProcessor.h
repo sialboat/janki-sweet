@@ -42,7 +42,15 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    //==============================================================================
+    juce::AudioProcessorValueTreeState apvts;
+    static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+
+    float getInputPeak() const noexcept;
+    float getOutputPeak() const noexcept;
 private:
     //==============================================================================
+    std::atomic<float> inputPeak {0.0f};
+    std::atomic<float> outputPeak {0.0f};
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
 };
