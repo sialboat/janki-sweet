@@ -6,7 +6,7 @@
 /*
     Themes.h
 
-    Contains namespaces and whatever else that we need to set looks and feels, color palettes, etc. 
+    Contains namespaces and whatever constants that we need to set looks and feels, color palettes, etc. 
 
     ...at least until we solidify a GUI direction this is what we're working with at least with the
     JUCE graphics engine

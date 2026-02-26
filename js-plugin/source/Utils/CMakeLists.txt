@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.22)
 set(UTILS_HEADERS
     small_math.h
     Measurement.h
+    decibel_conversions.h
 )
 set(UTILS_SOURCES
 )

@@ -27,6 +27,7 @@ public:
     gain(GAIN_TYPE type, float multiplier, float ramp);
 
     float process(float in);                    // applies a gain to the incoming sample based on gain_type, defaults to DECIBEL.
+    void reset();                               // initializes to the factory default values
 
     GAIN_TYPE get_gain_type() { return gain_type; }
     float get_ramp_value() { return ramp_value; }
@@ -45,6 +46,7 @@ private: // we don't necessarily need to reveal these to the world
     float process_linear(float in);             // applies a linear-scaling gain to the incoming sample regardless of gain_type
     float process_dbspl(float in);              // applies a decibel-scaling gain (dbSPL) to the incoming sample regardless of gain_type
     float process_dbfs(float in);               // applies a decibel-scaling gain (dbFS) to the incoming sample regardless of gain_type
+    float process_dbfs_gain(float in);          // applies a decibel-scaling gain (dbFS), does not account for bitrate.
     float lerp_gain_value();                    // linearly interpolates to the next gain value so we don't 
     virtual float process_function(float in);   // applies a custom function as gain to the incoming sample.
 

@@ -67,6 +67,28 @@ juce_add_plugin(JANKI_SWEET
 
 juce_generate_juce_header(JANKI_SWEET)
 
+
+# `target_link_libraries` links libraries and JUCE modules to other libraries or executables. Here,
+# we're linking our executable target to the `juce::juce_audio_utils` module. Inter-module
+# dependencies are resolved automatically, so `juce_core`, `juce_events` and so on will also be
+# linked automatically. If we'd generated a binary data target above, we would need to link to it
+# here too. This is a standard CMake command.
+
+target_link_libraries(JANKI_SWEET
+    PRIVATE
+        Assets
+        # AudioPluginData           # If we'd created a binary data target, we'd link to it here
+        juce::juce_audio_utils
+        juce::juce_audio_processors
+        juce::juce_graphics
+        juce::juce_events
+        juce::juce_gui_extra
+    PUBLIC
+        juce::juce_recommended_config_flags
+        juce::juce_recommended_lto_flags
+        juce::juce_recommended_warning_flags)
+
+
 # `target_sources` adds source files to a target. We pass the target that needs the sources as the
 # first argument, then a visibility parameter for the sources which should normally be PRIVATE.
 # Finally, we supply a list of source files that will be built into the target. This is a standard
@@ -86,17 +108,19 @@ target_sources(JANKI_SWEET
         source/PluginProcessor.cpp
         source/PluginProcessor.h
         source/PluginEditor.h
-        source/GUI/RotaryKnob.cpp
-        source/GUI/RotaryKnob.h
+        # source/GUI/RotaryKnob.cpp
+        # source/GUI/RotaryKnob.h
 )
 
 add_subdirectory(source/Utils)
 add_subdirectory(source/le-janky)
 add_subdirectory(source/GUI)
 add_subdirectory(source/Params)
+add_subdirectory(source/Devices)
 # target_include_directories(JANKI_SWEET
 #     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/source
 # )
+target_link_libraries(JANKI_SWEET PRIVATE PARAMS)
 
 # In case we wanted to add pictures or media we will throw it in assets
 file(GLOB_RECURSE Assets "${CMAKE_CURRENT_SOURCE_DIR}/assets/*.*")
@@ -128,23 +152,3 @@ juce_add_binary_data(Assets
     SOURCES
         ${Assets}
 )
-
-# `target_link_libraries` links libraries and JUCE modules to other libraries or executables. Here,
-# we're linking our executable target to the `juce::juce_audio_utils` module. Inter-module
-# dependencies are resolved automatically, so `juce_core`, `juce_events` and so on will also be
-# linked automatically. If we'd generated a binary data target above, we would need to link to it
-# here too. This is a standard CMake command.
-
-target_link_libraries(JANKI_SWEET
-    PRIVATE
-        Assets
-        # AudioPluginData           # If we'd created a binary data target, we'd link to it here
-        juce::juce_audio_utils
-        juce::juce_audio_processors
-        juce::juce_graphics
-        juce::juce_events
-        juce::juce_gui_extra
-    PUBLIC
-        juce::juce_recommended_config_flags
-        juce::juce_recommended_lto_flags
-        juce::juce_recommended_warning_flags)

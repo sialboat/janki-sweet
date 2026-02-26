@@ -10,8 +10,15 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), layout(createParameterLayout()), apvts(*this, nullptr, "PARAMETRS", std::move(layout))
+                    //    inputParameters(apvts)
 {
+    // add this to push each parameter submodule to the vector
+    inputProcessor = InputProcessor();
+    parameters.push_back(std::make_unique<std::unique_ptr<InputParameters>>())
+    
+    // inputParameters = std::make_unique<InputParameters>(apvts);
+    // inputParams = InputParameters(apvts);
 }
 
 AudioPluginAudioProcessor::~AudioPluginAudioProcessor()
@@ -84,6 +91,19 @@ void AudioPluginAudioProcessor::changeProgramName (int index, const juce::String
 }
 
 //==============================================================================
+
+juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::createParameterLayout()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout l;
+    
+    // three lines are needed to add parameters to the layout
+    auto inputs = InputParameters::createParameterGroup();
+    if(inputs != nullptr)
+        l.add(std::move(inputs->group));
+
+    return l;
+}
+
 void AudioPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
@@ -130,6 +150,12 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
+    for(size_t i = 0; i < parameters.size(); i++) {
+        parameters.at(i)->update();
+    }
+
+    inputProcessor.process(buffer);
+
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
     // guaranteed to be empty - they may contain garbage).
@@ -148,7 +174,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         auto* channelData = buffer.getWritePointer (channel);
-        juce::ignoreUnused (channelData);
+        juce::ignoreUnused (channelData);        
         // ..do something to the data...
     }
 }

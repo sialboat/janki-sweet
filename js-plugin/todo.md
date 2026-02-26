@@ -6,6 +6,7 @@
 - [ ] Figure out how to test current code
 - [ ] Input and Output sections
   - [ ] Input Gain knob and meter
+  - [ ] Panning DSP Processor
   - [x] Input Gain DSP Processor
     - [ ] potentially we may have to extend it to allow to process buffers as well but idk
 - [ ] Reading Brian's Book (1-3)

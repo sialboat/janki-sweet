@@ -4,8 +4,8 @@
 //==============================================================================
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p)
     : AudioProcessorEditor (&p), processorRef (p), 
-    inputKnob ("Input", processorRef.apvts, juce::ParameterID {"inputGain", 1}),
-    outputKnob ("Output", processorRef.apvts, juce::ParameterID {"outputGain", 1})
+    inputKnob ("Input", processorRef.getAPVTS(), juce::ParameterID {"inputGain", 1}),
+    outputKnob ("Output", processorRef.getAPVTS(), juce::ParameterID {"outputGain", 1})
 {
     addAndMakeVisible (inputKnob);
     addAndMakeVisible (outputKnob);
@@ -19,6 +19,7 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor()
 {
+    
 }
 
 //==============================================================================

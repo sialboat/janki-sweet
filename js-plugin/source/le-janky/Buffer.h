@@ -54,4 +54,13 @@ class buffer
 
 };
 
+// template<typename CHANNELS, typename TYPE>
+// class buffers_plural
+// {
+//     public:
+//     explicit buffer(size_t size) : capacity(size), arr(std::make_unqiue<TYPE[CHANNELS][]>(capacity)) {}
+
+//     TYPE& operator[][](size_t i) { return arr[i]; }
+// };
+
 #endif

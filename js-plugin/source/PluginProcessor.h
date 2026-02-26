@@ -1,6 +1,9 @@
 #pragma once
 
+#include <vector>
 #include <juce_audio_processors/juce_audio_processors.h>
+#include "Params/InputParameters.h"
+#include "Devices/InputProcessor.h"
 
 //==============================================================================
 class AudioPluginAudioProcessor final : public juce::AudioProcessor
@@ -11,6 +14,7 @@ public:
     ~AudioPluginAudioProcessor() override;
 
     //==============================================================================
+
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
@@ -42,13 +46,27 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    juce::AudioProcessorValueTreeState& getAPVTS() { return apvts; }
+
     //==============================================================================
-    juce::AudioProcessorValueTreeState apvts;
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
     float getInputPeak() const noexcept;
     float getOutputPeak() const noexcept;
 private:
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+    juce::AudioProcessorValueTreeState apvts;
+
+
+    std::vector<std::unique_ptr<Parameters>> parameters;
+
+    // we will eventually fit all of the special processors in data structures but not this one
+    // or the output one and also I'm lazy
+    InputProcessor inputProcessor; 
+    // std::vector<std::unique_ptr<AudioDevice>> processors;
+    // std::unique_ptr<InputParameters> inputParameters;
+    
+
     //==============================================================================
     std::atomic<float> inputPeak {0.0f};
     std::atomic<float> outputPeak {0.0f};

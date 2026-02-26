@@ -21,6 +21,13 @@ float gain::process(float input)
     }
 }
 
+void gain::reset()
+{
+    ramp_value = 100.0f;
+    multiplier = 1.0f;
+    gain_type = GAIN_TYPE::DB_FS;
+}
+
 float gain::process_linear(float in)
 {
     // this exists to prevent zipper noise / clicks if we have large changes in gain values
@@ -35,7 +42,7 @@ float gain::process_dbspl(float in)
     if(current_multiplier != multiplier)
         current_multiplier += lerp_gain_value();
     // apply log change of base because std::log is the natural log
-    return current_multiplier  * 20 * std::log10(in) - std::log10(2e-5);
+    return current_multiplier  * 20.0f * std::log10(in) - std::log10(2e-5f);
     // return current_multiplier * 20 * (std::log(in / 2e-5) / std::log(10));
 }
 
@@ -45,7 +52,7 @@ float gain::process_dbfs(float in)
 {
     if(current_multiplier != multiplier)
         current_multiplier += lerp_gain_value();
-    return current_multiplier * 20 * std::log10(std::abs(in)) - std::log10(std::pow(2, bitrate - 1));
+    return current_multiplier * 20.0f * std::log10(std::abs(in)) - std::log10(std::pow(2, bitrate - 1));
     // return current_multiplier * 20 * std::log(std::abs(in)) / (/* 2^(bitrate - 1) */ ) / std::log(10);  
 }
 

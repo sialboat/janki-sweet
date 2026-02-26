@@ -3,9 +3,11 @@
 #ifndef METER_H
 #define METER_H
 
-#include <JuceHeader.h>
+// #include <JuceHeader.h>
+#include <juce_audio_processors/juce_audio_processors.h>
+#include <juce_graphics/juce_graphics.h>
 #include "Measurement.h"
-#include "Themes.h"
+#include "GUI/Themes.h"
 
 class LevelMeter : public juce::Component,
                    private juce::Timer

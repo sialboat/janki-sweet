@@ -71,5 +71,8 @@ void LevelMeter::updateLevel(float newLevel, float& smoothedLevel, float& leveld
         smoothedLevel += (newLevel - smoothedLevel) * decay;
     
     if(smoothedLevel > clampLevel)
-        leveldB = 
-}
+        leveldB = juce::Decibels::gainToDecibels(smoothedLevel);
+    } else {
+        leveldB = clampdB;
+    }
+}   

@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.22)
 
 set(PARAM_SOURCES
     InputParameters.cpp
-
 )
 
 set(PARAM_HEADERS
@@ -10,6 +9,8 @@ set(PARAM_HEADERS
     ParameterWrapper.h
     InputParameters.h
 )
+
+
 # interface for when it's only headers, no compiler sources needed i think
 #
 # Practical Rules
@@ -26,9 +27,25 @@ add_library(PARAMS STATIC
     ${PARAM_HEADERS}
 )
 
+# juce_generate_juce_header(PARAMS)
+
+
+# target_link_libraries(PARAMS
+#     PUBLIC
+#         juce::juce_audio_processors
+#         juce::juce_core
+# )
+
+# since this subdirectory depends on some JUCE modules we have to include them here
+target_link_libraries(PARAMS PUBLIC
+    juce::juce_audio_processors
+    juce::juce_core # Often needed for certain parameter types
+)
+
 target_include_directories(PARAMS
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
+        # ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 target_link_libraries(JANKI_SWEET PRIVATE PARAMS)
