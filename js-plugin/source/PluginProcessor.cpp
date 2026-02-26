@@ -15,7 +15,7 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
 {
     // add this to push each parameter submodule to the vector
     inputProcessor = InputProcessor();
-    parameters.push_back(std::make_unique<std::unique_ptr<InputParameters>>())
+    parameters.push_back(std::make_unique<InputParameters>(apvts));
     
     // inputParameters = std::make_unique<InputParameters>(apvts);
     // inputParams = InputParameters(apvts);

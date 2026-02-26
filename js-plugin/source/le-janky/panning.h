@@ -27,10 +27,10 @@ public:
 
     panner() : rule(PANNING_RULE::EQUAL_POWER), pan_value(0.0f), mult(1.0f) {}
     panner(PANNING_RULE r, float b) : rule(r), pan_value(0.0f), mult(b) {}
-    panner(PANNING_RULE r) : rule(b), pan_value(0.0f), mult(1.0f) {}
+    panner(PANNING_RULE r) : rule(r), pan_value(0.0f), mult(1.0f) {}
     panner(float b) : rule(PANNING_RULE::EQUAL_POWER), pan_value(0.0f), mult(b) {}
 
-    void process(float& left, float& right);                 // given pointers to the left and right channels of audio, apply panning.
+    void process(float& left, float& right);                            // given pointers to the left and right channels of audio, apply panning.
     void reset();                                                       // re-initializes the panning processor.
 
     void set_rule(PANNING_RULE new_rule) {rule = new_rule;}             // sets a new pan processing rule.

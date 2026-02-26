@@ -1,6 +1,6 @@
 #include "InputProcessor.h"
 
-InputProcessor::InputProcessor() : gainEffect(GAIN_TYPE::DB_FS), panEffect()
+InputProcessor::InputProcessor() : gainEffect(), panEffect()
 {}
 
 void InputProcessor::prepare(double sampleRatge, int samplePerBlockExpected)

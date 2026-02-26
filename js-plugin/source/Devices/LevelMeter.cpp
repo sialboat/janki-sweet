@@ -1,6 +1,6 @@
 #include "LevelMeter.h"
 
-LevelMeter::LevelMeter(Measurement& l, Measurement& r): leftMeaurement(l), rightMeasurement(r), 
+LevelMeter::LevelMeter(Measurement& l, Measurement& r): leftMeasurement(l), rightMeasurement(r), 
     dbLevelL(clampdB), dbLevelR(clampdB)
 {
     setOpaque(true);
@@ -12,7 +12,7 @@ LevelMeter::~LevelMeter()
 {
 }
 
-void LevelMeter::paint()
+void LevelMeter::paint(juce::Graphics& g)
 {
     const auto bounds = getLocalBounds();
     
@@ -22,7 +22,7 @@ void LevelMeter::paint()
     drawLevel(g, dbLevelL, 0, 7);
     drawLevel(g, dbLevelR, 9, 7);
     
-    g.setFont(Fonts::getFont(10.0f));
+    // g.setFont(Fonts::getFont(10.0f));
     for(float db = maxdB; db >= mindB; db -= stepdB) { //meter tickline
         int y = positionForLevel(db);
         
@@ -42,8 +42,8 @@ void LevelMeter::resized()
 
 void LevelMeter::timerCallback()
 {
-    updateLevel(leftMeasurement.readAndReset(), levelL, dBLevelL);
-    updateLevel(rightMeasurement.readAndReset(), levelR, dBLevelR);
+    updateLevel(leftMeasurement.readAndReset(), levelL, dbLevelL);
+    updateLevel(rightMeasurement.readAndReset(), levelR, dbLevelR);
 
     repaint();
 }
@@ -72,7 +72,6 @@ void LevelMeter::updateLevel(float newLevel, float& smoothedLevel, float& leveld
     
     if(smoothedLevel > clampLevel)
         leveldB = juce::Decibels::gainToDecibels(smoothedLevel);
-    } else {
+    else
         leveldB = clampdB;
-    }
 }   

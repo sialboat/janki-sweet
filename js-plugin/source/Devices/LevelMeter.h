@@ -16,8 +16,8 @@ class LevelMeter : public juce::Component,
     LevelMeter(Measurement& left, Measurement& right);
     ~LevelMeter() override;
 
-    void paint();
-    void resized();
+    void paint(juce::Graphics&) override;
+    void resized() override;
 
     private:
 
@@ -34,9 +34,6 @@ class LevelMeter : public juce::Component,
 
     Measurement& leftMeasurement;
     Measurement& rightMeasurement;
-
-    Measurement& measurementL;
-    Measurement& measurementR;
     
     static constexpr float maxdB = 6.0f;
     static constexpr float mindB = -60.0f;

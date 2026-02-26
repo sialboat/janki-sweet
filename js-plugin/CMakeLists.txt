@@ -74,6 +74,15 @@ juce_generate_juce_header(JANKI_SWEET)
 # linked automatically. If we'd generated a binary data target above, we would need to link to it
 # here too. This is a standard CMake command.
 
+add_library(JUCE_HEADERS INTERFACE)
+target_link_libraries(JUCE_HEADERS INTERFACE
+    juce::juce_audio_utils
+    juce::juce_audio_processors
+    juce::juce_audio_basics
+    juce::juce_graphics
+    juce::juce_gui_extra
+)
+
 target_link_libraries(JANKI_SWEET
     PRIVATE
         Assets
@@ -137,7 +146,8 @@ target_compile_definitions(JANKI_SWEET
         # JUCE_WEB_BROWSER and JUCE_USE_CURL would be on by default, but you might not need them.
         JUCE_WEB_BROWSER=0  # If you remove this, add `NEEDS_WEB_BROWSER TRUE` to the `juce_add_plugin` call
         JUCE_USE_CURL=0     # If you remove this, add `NEEDS_CURL TRUE` to the `juce_add_plugin` call
-        JUCE_VST3_CAN_REPLACE_VST2=0)
+        JUCE_VST3_CAN_REPLACE_VST2=0
+)
 
 # If your target needs extra binary assets, you can add them here. The first argument is the name of
 # a new static library target that will include all the binary resources. There is an optional

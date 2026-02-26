@@ -11,7 +11,7 @@ set(UTILS_SOURCES
 # message(STATUS "UTILS include path: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 add_library(UTILS INTERFACE
-    # ${UTILS_HEADERS}
+    ${UTILS_HEADERS}
 )
 
 target_include_directories(UTILS

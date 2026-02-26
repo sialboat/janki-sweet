@@ -3,7 +3,9 @@
 #ifndef INPUT_PARAMETERS_H
 #define INPUT_PARAMETERS_H
 
+// #include <juce_gui_basics/juce_gui_basics.h>
 #include <juce_audio_processors/juce_audio_processors.h>
+// #include <juce_audio_processors/juce_audio_processors.h>
 #include "ParameterWrapper.h"
 #include "Parameters.h"
 
@@ -17,7 +19,9 @@ class InputParameters : public Parameters
 {
     public:
 
+    // InputParameters();
     InputParameters(juce::AudioProcessorValueTreeState& apvts);
+    
     
     static std::unique_ptr<PARAMS> createParameterGroup();
     

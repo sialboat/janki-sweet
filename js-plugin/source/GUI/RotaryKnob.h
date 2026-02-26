@@ -1,7 +1,9 @@
 
 #pragma once
 
-#include <JuceHeader.h>
+#include <juce_core/juce_core.h>
+#include <juce_gui_basics/juce_gui_basics.h>
+#include <juce_audio_processors/juce_audio_processors.h>
 
 #define DEFAULT_KNOB_WIDTH 64
 #define DEFAULT_KNOB_HEIGHT 64

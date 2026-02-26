@@ -22,9 +22,10 @@ set(PARAM_HEADERS
 # Internal sources              PRIVATE include dirs
 # (only for target itself)	    
 #
-add_library(PARAMS STATIC
-    ${PARAM_SOURCES}
-    ${PARAM_HEADERS}
+add_library(PARAMS 
+    STATIC
+        ${PARAM_SOURCES}
+        ${PARAM_HEADERS}
 )
 
 # juce_generate_juce_header(PARAMS)
@@ -48,4 +49,5 @@ target_include_directories(PARAMS
         # ${CMAKE_CURRENT_BINARY_DIR}
 )
 
+target_link_libraries(PARAMS PRIVATE JUCE_HEADERS)
 target_link_libraries(JANKI_SWEET PRIVATE PARAMS)

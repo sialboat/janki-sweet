@@ -20,7 +20,7 @@ static inline float convert_db_to_gain(float db, float minus_inf)
 
 static inline float convert_gain_to_db(float gain, float minus_inf)
 {
-    return std::max(20.0f * std::log10(gain), minus_inf);
+    return std::fmax(20.0f * std::log10(gain), minus_inf);
 }
 
 #endif
