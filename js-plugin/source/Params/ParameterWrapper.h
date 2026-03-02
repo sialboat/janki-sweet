@@ -11,20 +11,58 @@
     Header file that contains parameter wrappers for every kind of parameter. This allows for all parameters 
     to be created and added to the APVTS on one line, and for all parameters within an APVTS to be iterated
     on in a loop.
+
+    ParameterWrappers abstract the following:
+    - Juce AudioParameters: interacts with the APVTS and DSP processors to update values in real time
+    - Juce LinearSmoothedValues: interacts with AudioParameters to smooth changes across parameter values.
+    - Juce APVTS: for streamlining Parameter Creation and parameter updates
 */
 
+/*
+    Base parameter wrapper outlining all the virtual functions that must be implemented for 
+    the object to properly function.
+*/
 class BaseParamWrapper
 {
     public:
+
+    /* initialize the Parameter and by linking the parameter values within the object
+        to the assigned parameter in the APVTS.
+    */
     virtual void init(juce::AudioProcessorValueTreeState& apvts) = 0;
+
+    /*
+        Juce boilerplate that I forgort
+    */
     virtual void prepareToPlay(double sampleRate, double duration = 0.05) noexcept = 0;
+
+    /*
+        Resets a parameter to its default value
+    */
     virtual void reset() noexcept = 0;
+
+    /*
+        how to update parameter value upon value change.
+    */
     virtual void update() noexcept = 0;
+
+    /*
+        optionally apply a smoothing function to change in param values.  
+    */
     virtual void smoothen() noexcept = 0;
 
     virtual ~BaseParamWrapper() = default;
 };
 
+/* 
+    ParamWrapper<JUCE::PARAMETER, TYPE>
+
+    Base Parameter Wrapper class that does not account for a juce::LinearlySmoothedValue
+    within its specification (hence there is no use to implement the smoothen function here). 
+    Some parameters like AudioParameterBool or AudioParameterInt or AudioParameterChoice does
+    not need a smoother so it is probably a good idea to include this so we don't have useless
+    shit clogging our memory.
+*/
 template <typename PARAM, typename T>
 class ParamWrapper : public BaseParamWrapper
 {
@@ -45,6 +83,13 @@ class ParamWrapper : public BaseParamWrapper
     float mult = 1.0f;
 };
 
+/*
+    SmoothParamWrapper<JUCE_AUDIO_PARAM, TYPE>
+
+    Base Parameter Wrapper class that contains a Juce::LinearSmoothedValue<float>
+    (most likely because this is used for floating point parameters) within the
+    abstraction. 
+*/
 template <typename PARAM, typename T>
 class SmoothParamWrapper : public BaseParamWrapper
 {
@@ -67,6 +112,12 @@ class SmoothParamWrapper : public BaseParamWrapper
     float mult = 1.0f;
 };
 
+/*
+    FloatParamWrapper<AudioParameterFloat, float>
+
+    Basic Float Parameter Wrapper that adheres to the Parameter Wrapper design goals 
+    specified above.
+*/
 class FloatParamWrapper : public SmoothParamWrapper < juce::AudioParameterFloat, float>
 {
     public:
@@ -129,6 +180,14 @@ class FloatParamWrapper : public SmoothParamWrapper < juce::AudioParameterFloat,
     }
 };
 
+/*
+    FloatGainParamWrapper<juce::AudioParameterFloat, float>
+
+    Float Parameter Wrapper specifically tailored to abstracting gain-related parameters
+    by utilizing gain-conversion functions.
+
+    TODO: when not lazy, replace juce::Decibels functions to the functions in decibel_conversions.h
+*/
 class FloatGainParamWrapper : public SmoothParamWrapper <juce::AudioParameterFloat, float>
 {
     public:
@@ -186,7 +245,13 @@ class FloatGainParamWrapper : public SmoothParamWrapper <juce::AudioParameterFlo
     }
 };
 
-class FloatExpParamWrapper : public SmoothParamWrapper <juce::AudioParameterFloat, float>
+/*
+    FloatExpParameterWrapper
+
+    Float ParameterWrapper that is specifically tailored to a custom smoothing function
+    that is different from juce::LinearSmoothedFunction.
+*/
+class FloatExpParamWrapper : public ParamWrapper<juce::AudioParameterFloat, float>
 {
     public:
     
@@ -249,15 +314,21 @@ class FloatExpParamWrapper : public SmoothParamWrapper <juce::AudioParameterFloa
     
     public:
     FloatExpParamWrapper(juce::AudioParameterFloat* _param, const juce::ParameterID& _paramID, float _defaultValue)
-    : SmoothParamWrapper<juce::AudioParameterFloat, float>(_param, _paramID, _defaultValue) {}
+    : ParamWrapper<juce::AudioParameterFloat, float>(_param, _paramID, _defaultValue) {}
     
     FloatExpParamWrapper(juce::AudioParameterFloat* _param, const juce::ParameterID& _paramID, float _defaultValue, float _mult, float _target, float _coeff)
-    : SmoothParamWrapper<juce::AudioParameterFloat, float>(_param, _paramID, _defaultValue), target(_target), coeff(_coeff) {
-        smoother = juce::LinearSmoothedValue<float>(_defaultValue);
+    : ParamWrapper<juce::AudioParameterFloat, float>(_param, _paramID, _defaultValue), target(_target), coeff(_coeff) {
+        // smoother = juce::LinearSmoothedValue<float>(_defaultValue);
         mult = _mult;
     }
 };
 
+/*
+    IntParamWrapper
+
+    Parameter Wrapper that abstracts an Integer Parameter based on the
+    design specifications mentioned above.
+*/
 class IntParamWrapper : public ParamWrapper<juce::AudioParameterInt, int>
 {
     public:
@@ -296,6 +367,11 @@ class IntParamWrapper : public ParamWrapper<juce::AudioParameterInt, int>
     : ParamWrapper<juce::AudioParameterInt, int>(_param, _paramID, _defaultValue) {}
 };
 
+/*
+    BoolParamWrapper
+
+    Parameter Wrappers abstracting a Boolean Audio Parameter
+*/
 class BoolParamWrapper : public ParamWrapper<juce::AudioParameterBool, bool>
 {
     public:
@@ -334,6 +410,13 @@ class BoolParamWrapper : public ParamWrapper<juce::AudioParameterBool, bool>
     : ParamWrapper<juce::AudioParameterBool, bool>(_param, _paramID, _defaultValue) {}
 };
 
+/*
+    ChoiceParamWrapper
+
+    Parameter Wrapper abstracting the juce::AudioParameterChoice parameter, fairly similar
+    to the juce::AudioParameterInt with the exception that I believe you can also specify
+    an array of values / whatnot for this one to scan through.
+*/
 class ChoiceParamWrapper : public ParamWrapper<juce::AudioParameterChoice, int>
 {
     public:

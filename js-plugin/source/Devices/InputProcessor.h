@@ -10,6 +10,14 @@
 #include "le-janky/gain.h"
 #include "le-janky/panning.h"
 
+/*
+    InputProcessor
+
+    Class that abstracts the DSP processes needed within the input
+    section of the plugin into prepare and process subroutines. 
+    More methods can be added to allow access for DSP primitive
+    functions.
+*/
 class InputProcessor : public AudioDevice
 {
     public:
