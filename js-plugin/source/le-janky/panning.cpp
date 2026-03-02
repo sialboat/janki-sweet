@@ -35,8 +35,8 @@ void panner::pan_linear(float& left, float& right)
 void panner::pan_equal_power(float& left, float& right)
 {
     float angle = 0.7853981633974483f * (pan_value + 1.0f);
-    left *= std::sin(angle) * convert_db_to_gain(mult, DEFAULT_MINUS_INF);
-    right *= std::cos(angle) * convert_db_to_gain(mult, DEFAULT_MINUS_INF);
+    left *= std::cos(angle) * convert_db_to_gain(mult, DEFAULT_MINUS_INF);
+    right *= std::sin(angle) * convert_db_to_gain(mult, DEFAULT_MINUS_INF);
 }
 
 void panner::pan_sqrt(float& left, float& right)

@@ -49,5 +49,5 @@ void InputParameters::smoothen()
 void InputParameters::update()
 {
     inputParams.inGainParam->update();
-    inputParams.panParam->smoothen();
+    inputParams.panParam->update();
 }

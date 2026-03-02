@@ -1,3 +1,4 @@
+// PluginProcessor.h
 #pragma once
 
 #include <vector>
@@ -49,7 +50,20 @@ public:
     juce::AudioProcessorValueTreeState& getAPVTS() { return apvts; }
 
     //==============================================================================
-    static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
+    {
+        juce::AudioProcessorValueTreeState::ParameterLayout l;
+
+        auto inputs = InputParameters::createParameterGroup();
+        if (inputs != nullptr)
+            l.add(std::move(inputs->group));
+
+        autio outputs = outputParameters::createParameterGroup();
+        if (outputs != nullptr)
+            l.add(std::move(outputs->group));
+        return l;
+        
+    }
 
     float getInputPeak() const noexcept;
     float getOutputPeak() const noexcept;

@@ -1,3 +1,5 @@
+// PluginProcessor.cpp
+
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
@@ -154,8 +156,7 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         parameters.at(i)->update();
     }
 
-    inputProcessor.process(buffer);
-
+    
     // In case we have more outputs than inputs, this code clears any output
     // channels that didn't contain input data, (because these aren't
     // guaranteed to be empty - they may contain garbage).
@@ -163,8 +164,8 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
-
+    buffer.clear (i, 0, buffer.getNumSamples());
+    
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
     // Make sure to reset the state if your inner loop is processing
@@ -177,6 +178,17 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         juce::ignoreUnused (channelData);        
         // ..do something to the data...
     }
+    
+    //input parameter smooth
+    for (auto& p : parameters){
+        p->update();
+        p->smoothen();
+    }
+    //get smoothed values
+    inputProcessor.setInputGainLinear(smoothedInputGainLinear);
+    inputProcessor.setInputPan(smoothedInputPan);
+    //process audio
+    inputProcessor.process(buffer);
 }
 
 //==============================================================================
@@ -211,4 +223,19 @@ void AudioPluginAudioProcessor::setStateInformation (const void* data, int sizeI
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new AudioPluginAudioProcessor();
+}
+//===============================================================================
+juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::createParameterLayout()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout l;
+
+    auto inputs = InputParameters::createParameterGroup();
+    if (inputs != nullptr)
+        l.add(std::move(inputs->group));
+
+    auto outputs = OutputParameters::createParameterGroup();
+    if (outputs != nullptr)
+        l.add(std::move(outputs->group));
+
+    return l;
 }

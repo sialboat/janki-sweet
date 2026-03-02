@@ -1,10 +1,12 @@
-
+// ParameterWrapper.h
 #pragma once
 #ifndef PARAMETER_WRAPPER_H
 #define PARAMETER_WRAPPER_H
 
 #include <juce_audio_processors/juce_audio_processors.h>
-
+#include <memory>
+#include <atomic>
+#include <cmath>
 /*
     ParameterWrapper.h
 
@@ -13,6 +15,7 @@
     on in a loop.
 */
 
+//-------- Base interface-------
 class BaseParamWrapper
 {
     public:
@@ -25,6 +28,7 @@ class BaseParamWrapper
     virtual ~BaseParamWrapper() = default;
 };
 
+//===========Non-smoothed wrapper==========
 template <typename PARAM, typename T>
 class ParamWrapper : public BaseParamWrapper
 {
@@ -45,6 +49,7 @@ class ParamWrapper : public BaseParamWrapper
     float mult = 1.0f;
 };
 
+//=========Smoothed wrapper===========
 template <typename PARAM, typename T>
 class SmoothParamWrapper : public BaseParamWrapper
 {
@@ -67,6 +72,7 @@ class SmoothParamWrapper : public BaseParamWrapper
     float mult = 1.0f;
 };
 
+// ========== Float (smoothed) ===============
 class FloatParamWrapper : public SmoothParamWrapper < juce::AudioParameterFloat, float>
 {
     public:
@@ -108,7 +114,7 @@ class FloatParamWrapper : public SmoothParamWrapper < juce::AudioParameterFloat,
     void update() noexcept override
     {
         if(rawValue != nullptr)
-            smoother.setTargetValue(param->get() * mult);
+            smoother.setTargetValue(rawValue->load() * mult);
     }
 
     void smoothen() noexcept override
@@ -129,6 +135,8 @@ class FloatParamWrapper : public SmoothParamWrapper < juce::AudioParameterFloat,
     }
 };
 
+
+// =============== Gain in dB -> linear (smoothed) =========================
 class FloatGainParamWrapper : public SmoothParamWrapper <juce::AudioParameterFloat, float>
 {
     public:
@@ -185,6 +193,8 @@ class FloatGainParamWrapper : public SmoothParamWrapper <juce::AudioParameterFlo
         mult = _mult;
     }
 };
+
+
 
 class FloatExpParamWrapper : public SmoothParamWrapper <juce::AudioParameterFloat, float>
 {
@@ -258,6 +268,7 @@ class FloatExpParamWrapper : public SmoothParamWrapper <juce::AudioParameterFloa
     }
 };
 
+//================= Int (not smoothed) ==================
 class IntParamWrapper : public ParamWrapper<juce::AudioParameterInt, int>
 {
     public:
@@ -296,6 +307,7 @@ class IntParamWrapper : public ParamWrapper<juce::AudioParameterInt, int>
     : ParamWrapper<juce::AudioParameterInt, int>(_param, _paramID, _defaultValue) {}
 };
 
+//================= Bool (not smoothed) ==================
 class BoolParamWrapper : public ParamWrapper<juce::AudioParameterBool, bool>
 {
     public:
@@ -334,6 +346,7 @@ class BoolParamWrapper : public ParamWrapper<juce::AudioParameterBool, bool>
     : ParamWrapper<juce::AudioParameterBool, bool>(_param, _paramID, _defaultValue) {}
 };
 
+//================= Choice (not smoothed) ==================
 class ChoiceParamWrapper : public ParamWrapper<juce::AudioParameterChoice, int>
 {
     public:

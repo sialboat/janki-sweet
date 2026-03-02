@@ -1,3 +1,4 @@
+// InputProcessor.h
 #pragma once
 
 #ifndef INPUT_PROCESSOR_H
@@ -14,11 +15,16 @@ class InputProcessor : public AudioDevice
 {
     public:
     InputProcessor();
+    //feed pan parameter into panner
+    void setInputGainLinear(float g) {inputGainLinear = g;}
+    void setInputPan (float p) {inputPan = p;}
 
     void prepare(double sampleRate, int samplesPerBlockExpected) override;
     void process(juce::AudioBuffer<float>& in) override;
 
     private:
+    float inputGainLinear = 1.0f; //already linear
+    float inputPan = 0.0f; //[-1,1] smoothed
     gain gainEffect;
     panner panEffect;
 };
