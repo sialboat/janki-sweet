@@ -3,10 +3,14 @@
 #ifndef MULTI_STATE_BUTTON_H
 #define MULTI_STATE_BUTTON_H
 
-// class MultiStateButton : public juce::Button
-// {
-//     public:
-//     private:
-// };
+class MultiStateButton : public juce::Button
+{
+    public:
+    private:
+    
+    juce::StringArray choices;
+    juce::Button button;
+
+};
 
 #endif
