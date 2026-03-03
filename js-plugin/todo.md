@@ -4,19 +4,21 @@
 
 - [ ] `CMakeLists.txt` in subfolders
 - [ ] Figure out how to test current code
-- [ ] Input and Output sections
-  - [ ] Input Gain knob and meter
-  - [ ] Panning DSP Processor
-  - [x] Input Gain DSP Processor
-    - [ ] potentially we may have to extend it to allow to process buffers as well but idk
 - [ ] Reading Brian's Book (1-3)
+- [ ] Maybe add a *DIM* button in the Output Section? (reduces output by a flat amount to make things quieter)
 
 ## High Prio
 
 - [ ] Figure out how to test current code
+- [ ] Input and Output sections
+  - [x] Input Gain knob and meter
+  - [x] Panning DSP Processor
+  - [x] Clipping DSP Processor
+  - [x] Input Gain DSP Processor
 
 ## Med Prio
 
-- [ ] Document `gain.h` and `gain.cpp`
+- [x] Document `gain.h` and `gain.cpp`
+- [x] Document new `le-janky` files (`clipper` and `panning`)
 
 ## Low Prio

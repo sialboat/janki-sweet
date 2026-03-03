@@ -15,6 +15,12 @@ struct OUTPUT_PARAMS : public PARAMS{
     std::unique_pts<ChoiceParamWrapper> clipModeParam; //off/hard/soft
 }
 
+/*
+    Output Parameters
+
+    Parameter class that manages parameter values (between GUI and AudioProcessor)
+    for the Output-related parameters and DSP effects (Input Gain and Pan and Clipping).
+*/
 class OutputParameters : public Parameters {
     public:
         OutputParameters(juce::AudioProcessorValueTreeState& apvts);
