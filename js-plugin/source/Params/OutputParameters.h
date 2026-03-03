@@ -11,11 +11,11 @@
 //output parameters
 struct OUTPUT_PARAMS : public PARAMS{
     std::unique_ptr<FloatGainParamWrapper> outGainParam;
-    std::unique_pts<FloatParamWrapper> mixParam; //o-100%
+    std::unique_pts<FloatParamWrapper> mixParam; //0-100%
     std::unique_pts<ChoiceParamWrapper> clipModeParam; //off/hard/soft
 }
 
-class OutputParameters : public Parameters{
+class OutputParameters : public Parameters {
     public:
         OutputParameters(juce::AudioProcessorValueTreeState& apvts);
 

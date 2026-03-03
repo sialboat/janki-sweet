@@ -6,7 +6,7 @@ InputProcessor::InputProcessor() : gainEffect(), panEffect()
 
 void InputProcessor::prepare(double sampleRate, int samplePerBlockExpected)
 {
-    juce::ignoreUnused(sampleRate, samplesPerBlockExpected);
+    juce::ignoreUnused(sampleRate, samplePerBlockExpected);
     gainEffect.reset();
     panEffect.reset();
 }

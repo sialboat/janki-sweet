@@ -1,7 +1,7 @@
 // OutputParameters.cpp
 #include "OutputParameters.h"
 
-OutputParameters::OutputParameters(juce::AudioProcessorValueTreeState&_apvts) : Parameters(_apvts), apvts(_apvts)
+OutputParameters::OutputParameters(juce::AudioProcessorValueTreeState& _apvts) : Parameters(_apvts), apvts(_apvts)
 {
     //outputParams.* pointers are null until createParameterGroup() makes them so it should only be called after
     //apvts has been constructed
@@ -14,7 +14,7 @@ OutputParameters::OutputParameters(juce::AudioProcessorValueTreeState&_apvts) : 
 
 std::unique_ptr<PARAMS> OutputParameters::createParameterGroup()
 {
-    audto outputParams = std::make_unique<OUTPUT_PARAMS>();
+    auto outputParams = std::make_unique<OUTPUT_PARAMS>();
 
     outputParams->group = std::make_unique<juce::AudioProcessorparameterGroup>("out_params", "Output", "|");
 
