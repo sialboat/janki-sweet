@@ -1,12 +1,20 @@
 #include "InputParameters.h"
 
+/*
+    Within the Parameter Creating process, we must include STRUCT_NAME.param->init(apvts); to initialize each
+    AudioParameterWrapper. This must happen before createParameterGroup for the parameters to work
+*/
 InputParameters::InputParameters(juce::AudioProcessorValueTreeState& _apvts) : Parameters(_apvts), apvts(_apvts)
 {
     inputParams.inGainParam->init(apvts);
     inputParams.panParam->init(apvts);
 }
 
-// add parameters here
+/*
+    Creates a group of parameters that can be added to the APVTS layout in the PluginProcessor file.
+
+    Creating the actual parameters that the AudioParameterWrappers encapsulate is being done here.
+*/
 std::unique_ptr<PARAMS> InputParameters::createParameterGroup()
 {
     // std::unique_ptr<juce::AudioProcessorParameterGroup> group;
@@ -28,24 +36,37 @@ std::unique_ptr<PARAMS> InputParameters::createParameterGroup()
     return inputParams;
 }
 
+/*
+    some juce boilerplate that I forgot what it does
+*/
 void InputParameters::prepareToPlay(int sampleRate, double duration)
 {
     inputParams.inGainParam->prepareToPlay(sampleRate, duration);
     inputParams.panParam->prepareToPlay(sampleRate, duration);
 }
 
+/*
+    Resets a parameter if it was double-clicked on.
+*/
 void InputParameters::reset()
 {
     inputParams.inGainParam->reset();
     inputParams.panParam->reset();
 }
 
+/*
+    Applies a smoothing function to changing parameter values to
+    prevent unwanted noise (especially for changes in gain)
+*/
 void InputParameters::smoothen()
 {
     inputParams.inGainParam->smoothen();
     inputParams.panParam->smoothen();
 }
 
+/*
+    updates the parameter on value change.
+*/
 void InputParameters::update()
 {
     inputParams.inGainParam->update();

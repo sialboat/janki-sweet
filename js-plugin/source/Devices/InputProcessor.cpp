@@ -4,13 +4,21 @@
 InputProcessor::InputProcessor() : gainEffect(), panEffect()
 {}
 
-void InputProcessor::prepare(double sampleRate, int samplesPerBlockExpected)
+/*
+    Resets all DSP objects within the InputProcessor
+*/
+void InputProcessor::prepare([[maybe_unused]]double sampleRate, [[maybe_unused]]int samplePerBlockExpected)
 {
     juce::ignoreUnused(sampleRate, samplePerBlockExpected);
     gainEffect.reset();
     panEffect.reset();
 }
 
+/*
+    Applies the DSP effects on a sample-by-sample basis to the incoming juce::AudioBuffer.
+
+    In the case of the InputProcessor, this is a simple pan and input gain.
+*/
 void InputProcessor::process(juce::AudioBuffer<float>& in)
 {   
     //pan follows the knob
@@ -26,7 +34,7 @@ void InputProcessor::process(juce::AudioBuffer<float>& in)
     // the code holy shit my cs classes are teaching me things
     auto* left = in.getWritePointer(0);
     auto* right = in.getWritePointer(1);
-    size_t numSamples = in.getNumSamples();
+    size_t numSamples = in.getNumSamples(); // num samples per channel
     for(size_t i = 0; i < numSamples; ++i)
     {
         //gain first

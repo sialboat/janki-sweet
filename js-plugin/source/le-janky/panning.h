@@ -4,13 +4,14 @@
 #define PANNING_H
 
 #include <cmath>
-// #include <assert>
 #include "Utils/decibel_conversions.h"
 
+// Defines of typical dBFS multipliers used with panning.
 #define DEFAULT_MULT 3.0f
 #define MULT_4_5 4.5f
 #define MULT_6 6.0f
 
+// Struct defining different panning rules that this dsp object implements.
 enum class PANNING_RULE
 {
     LINEAR, EQUAL_POWER, SQRT
@@ -18,9 +19,16 @@ enum class PANNING_RULE
 
 // http://gdsp.hf.ntnu.no/lessons/1/5/
 // https://www.dsprelated.com/freebooks/sasp/Panning_Problem.html
+// https://dsp.stackexchange.com/questions/21691/algorithm-to-pan-audio
 // we assume the pan values passed into this class is between -1.0f and 1.0f
 // WE DO NOT ACTUALLY CHECK THIS IS THE CASE BECAUSE I AM LAZY AND HAVE NOT 
 // IMPLEMENTED IT YET.
+
+/*
+    Panner class
+
+    DSP primitive class that allows for panning two float samples.
+*/
 class panner
 {
 public:
@@ -41,11 +49,10 @@ public:
     PANNING_RULE get_rule() { return rule; }                            // gets the panning rule.
     
 private:
-    void pan_linear(float& left, float& right);              // linear panning processing
-    void pan_equal_power(float& left, float& right);         // equal power panning 
-    void pan_sqrt(float& left, float& right);                // sqaure root panning
+    void pan_linear(float& left, float& right);                         // linear panning processing
+    void pan_equal_power(float& left, float& right);                    // equal power panning 
+    void pan_sqrt(float& left, float& right);                           // sqaure root panning
 
-    
     PANNING_RULE rule;                                                  // panning rule to which the object will process
     float pan_value;                                                    // internal pan value
     float mult;                                                         // decibel multiplier value that compensates for perceptual losses. 
