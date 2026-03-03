@@ -25,8 +25,8 @@ class base_param
 
 typedef struct PARAMS {
     std::unique_ptr<juce::AudioProcessorParameterGroup> group;
-
     // parameters and group go here
+
     ~PARAMS() = default;
 } PARAMS;
 

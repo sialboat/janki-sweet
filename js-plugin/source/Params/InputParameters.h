@@ -22,7 +22,6 @@ class InputParameters : public Parameters
     // InputParameters();
     InputParameters(juce::AudioProcessorValueTreeState& apvts);
     
-    
     static std::unique_ptr<PARAMS> createParameterGroup();
     
     void prepareToPlay(int samplesPerBlockExpected, double sampleRate = 0.05) override;

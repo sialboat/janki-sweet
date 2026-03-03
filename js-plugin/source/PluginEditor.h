@@ -13,7 +13,7 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
-
+    
 private:
     void timerCallback() override;
     // This reference is provided as a quick way for your editor to

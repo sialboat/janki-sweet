@@ -29,6 +29,7 @@ class OutputParameters : public Parameters{
         OUTPUT_PARAMS& getOutputParams() {return outputParams;}
     private:
         OUTPUT_PARAMS outputParams;
+        juce::StringArray clipperModes = {"Off", "Hard", "Soft"};
         juce::AudioProcessorValueTreeState& apvts;
 };
 

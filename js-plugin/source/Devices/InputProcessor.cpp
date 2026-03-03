@@ -4,7 +4,7 @@
 InputProcessor::InputProcessor() : gainEffect(), panEffect()
 {}
 
-void InputProcessor::prepare(double sampleRate, int samplePerBlockExpected)
+void InputProcessor::prepare(double sampleRate, int samplesPerBlockExpected)
 {
     juce::ignoreUnused(sampleRate, samplesPerBlockExpected);
     gainEffect.reset();
@@ -14,9 +14,13 @@ void InputProcessor::prepare(double sampleRate, int samplePerBlockExpected)
 void InputProcessor::process(juce::AudioBuffer<float>& in)
 {   
     //pan follows the knob
-    gainEffect.set_gain_type(GAIN_TYPE::LINEAR);
-    gainEffect.set_multiplier(inputGainLinear);
-    panEffect.set_pan_value(inputPan);
+
+    // we don't need this because the GainEffect constructor does this for us by
+    // default.
+    // gainEffect.set_gain_type(GAIN_TYPE::LINEAR);
+    // gainEffect.set_multiplier(inputGainLinear);
+    // panEffect.set_pan_value(inputPan);
+    
     // juce does not interleave their buffers, and this makes sense from
     // a cache coherence reason!!! It also makes it easier to parallelize
     // the code holy shit my cs classes are teaching me things
