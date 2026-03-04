@@ -23,8 +23,11 @@ class OutputProcessor : public AudioDevice
     // "we cannot modify the reference Measurement& being returned"
     // the second one (left() const) says 
     // "the function is not allowed to modify Measurement&"
-    const Measurement& left() const noexcept { return levelL; }
-    const Measurement& right() const noexcept { return levelR; }
+    Measurement& left() noexcept { return levelL; }
+    Measurement& right() noexcept { return levelR; }
+
+    // const Measurement& left() const noexcept { return levelL; }
+    // const Measurement& right() const noexcept { return levelR; }
 
     private:
     OutputParameters& outputParams;

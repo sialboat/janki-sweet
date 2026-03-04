@@ -19,12 +19,14 @@ struct Measurement
         while(newValue > oldValue && !value.compare_exchange_weak(oldValue, newValue));
     }
 
-    float readAndReset()
+    // noexcept so the compiler does not cry
+    float readAndReset() const noexcept
     {
         return value.exchange(0.0f);
     }
 
-    std::atomic<float> value;
+    // mutable exists so we can let non static variables inside of a const function
+    mutable std::atomic<float> value; 
 };
 
 #endif

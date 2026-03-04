@@ -41,7 +41,7 @@ class InputParameters : public Parameters
 {
     public:
 
-    // InputParameters();
+    InputParameters();
     InputParameters(juce::AudioProcessorValueTreeState& apvts);
     
     static std::unique_ptr<PARAMS> createParameterGroup();

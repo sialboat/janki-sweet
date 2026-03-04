@@ -27,6 +27,7 @@ class InputProcessor : public AudioDevice
 {
     public:
     InputProcessor();
+    InputProcessor(InputParameters& ip);
     //feed pan parameter into panner
     void setInputGainLinear(float g) {inputGainLinear = g;}
     void setInputPan (float p) {inputPan = p;}
@@ -35,8 +36,8 @@ class InputProcessor : public AudioDevice
     void process(juce::AudioBuffer<float>& in) override;
 
     // Adding this so we can access input measurement levels
-    const Measurement& left() const noexcept { return levelL; }
-    const Measurement& right() const noexcept { return levelR; }
+    Measurement& left() noexcept { return levelL; }
+    Measurement& right() noexcept { return levelR; }
 
     private:
     // we don't rlly need these because the parameters are stored in the AudioParameters

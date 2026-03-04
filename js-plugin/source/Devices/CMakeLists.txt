@@ -4,13 +4,13 @@ cmake_minimum_required(VERSION 3.22)
 
 set(AUDIO_DEVICES_SOURCES
     InputProcessor.cpp
-    LevelMeter.cpp
+    OutputProcessor.cpp
 )
 
 set(AUDIO_DEVICES_HEADERS
     AudioDevice.h
     InputProcessor.h
-    LevelMeter.h
+    OutputProcessor.h
 )
 
 add_library(AUDIO_DEVICES
@@ -19,9 +19,9 @@ add_library(AUDIO_DEVICES
         ${AUDIO_DEVICES_SOURCES}
 )
 
+# target_link_libraries(AUDIO_DEVICES PRIVATE GUI)
 target_link_libraries(AUDIO_DEVICES PRIVATE JUCE_HEADERS)
 target_link_libraries(AUDIO_DEVICES PUBLIC PARAMS) 
-target_link_libraries(AUDIO_DEVICES PRIVATE GUI)
 target_link_libraries(AUDIO_DEVICES PRIVATE LE_JANKY) # this is needed so dsp files have the math utils
 target_link_libraries(AUDIO_DEVICES PRIVATE UTILS) # this is needed so dsp files have the math utils
 target_link_libraries(JANKI_SWEET PUBLIC AUDIO_DEVICES)

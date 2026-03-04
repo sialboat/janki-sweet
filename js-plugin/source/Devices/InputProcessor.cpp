@@ -4,6 +4,8 @@
 InputProcessor::InputProcessor() : gainEffect(), panEffect()
 {}
 
+InputProcessor::InputProcessor([[maybe_unused]] InputParameters& p) : gainEffect(), panEffect()
+{}
 /*
     Resets all DSP objects within the InputProcessor
 */

@@ -4,8 +4,8 @@
 //==============================================================================
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAudioProcessor& p)
     : AudioProcessorEditor (&p), processorRef (p), 
-    inputSection(p.getAPVTS(), p.getParameters(INPUT_INDEX), p.getAudioDevice(INPUT_INDEX)),
-    outputSection(p.getAPVTS(), p.getParameters(OUTPUT_INDEX), p.getAudioDevice(OUTPUT_INDEX))
+    inputSection(p.getAPVTS(), p.getInputParams(), *dynamic_cast<InputProcessor*>(&p.getAudioDevice(INPUT_INDEX))),
+    outputSection(p.getAPVTS(), p.getOutputParams(), *dynamic_cast<OutputProcessor*>(&p.getAudioDevice(OUTPUT_INDEX)))
 {
     juce::ignoreUnused (processorRef);
     addAndMakeVisible(inputSection);
@@ -13,7 +13,6 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor (AudioPluginAud
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
     setSize (520, 260);
-    startTimerHz (30);
 
 }
 

@@ -24,7 +24,7 @@ class AudioDevice
     public:
     virtual void prepare(double s, int i) = 0;
     virtual void process(juce::AudioBuffer<float>& b) = 0;
-    // virtual ~AudioDevice() = default;
+    virtual ~AudioDevice() = default;
 };
 
 #endif

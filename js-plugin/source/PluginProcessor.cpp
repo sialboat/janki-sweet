@@ -6,6 +6,23 @@
 
 
 //==============================================================================
+
+juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::createParameterLayout()
+{
+    juce::AudioProcessorValueTreeState::ParameterLayout l;
+    
+    // three lines are needed to add parameters to the layout
+    auto inputs = InputParameters::createParameterGroup();
+    if(inputs != nullptr)
+        l.add(std::move(inputs->group));
+
+    auto outputs = OutputParameters::createParameterGroup();
+    if(outputs != nullptr)
+        l.add(std::move(inputs->group));
+
+    return l;
+}
+
 AudioPluginAudioProcessor::AudioPluginAudioProcessor()
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
@@ -21,12 +38,16 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
     // inputProcessor = InputProcessor();
 
     // push back the parameters for the apvts
-    parameters.push_back(std::make_unique<InputParameters>(apvts));
-    parameters.push_back(std::make_unique<OutputParameters>(apvts));
+    createAndPushParameters<InputParameters>();
+    createAndPushParameters<OutputParameters>();
+    // parameters.push_back(std::make_unique<InputParameters>(apvts));
+    // parameters.push_back(std::make_unique<OutputParameters>(apvts));
 
     // push back the processors
-    processors.push_back(std::make_unique<InputProcessor>(parameters.at(INPUT_INDEX)));
-    processors.push_back(std::make_unique<OutputProcessor>(parameters.at(OUTPUT_INDEX)));
+    createAndPushProcessor<InputParameters, InputProcessor>(INPUT_INDEX);
+    createAndPushProcessor<OutputParameters, OutputProcessor>(OUTPUT_INDEX);
+    // processors.push_back(std::make_unique<InputProcessor>());
+    // processors.push_back(std::make_unique<OutputProcessor>(parameters.at(OUTPUT_INDEX).get()));
     // inputParameters = std::make_unique<InputParameters>(apvts);
     // inputParams = InputParameters(apvts);
 }
@@ -102,22 +123,6 @@ void AudioPluginAudioProcessor::changeProgramName (int index, const juce::String
 
 //==============================================================================
 
-juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::createParameterLayout()
-{
-    juce::AudioProcessorValueTreeState::ParameterLayout l;
-    
-    // three lines are needed to add parameters to the layout
-    auto inputs = InputParameters::createParameterGroup();
-    if(inputs != nullptr)
-        l.add(std::move(inputs->group));
-
-    auto outputs = OutputParameters::createParameterGroup();
-    if(outputs != nullptr)
-        l.add(std::move(inputs->group));
-
-    return l;
-}
-
 void AudioPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Use this method as the place to do any pre-playback
@@ -179,8 +184,10 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         buffer.clear (i, 0, buffer.getNumSamples());
     
     // run through each processor and process based on the juce::AudioBuffer<float> buffer
-    for(auto p : processors)
-        p.process(buffer);
+    for(size_t i = 0; i < processors.size(); i++)
+        processors.at(i)->process(buffer);
+    // for(auto p : processors)
+    //     p->process(buffer);
 
 
     // This is the place where you'd normally do the guts of your plugin's
@@ -202,10 +209,10 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         p->smoothen();
     }
     //get smoothed values
-    inputProcessor.setInputGainLinear(smoothedInputGainLinear);
-    inputProcessor.setInputPan(smoothedInputPan);
-    //process audio
-    inputProcessor.process(buffer);
+    // inputProcessor.setInputGainLinear(smoothedInputGainLinear);
+    // inputProcessor.setInputPan(smoothedInputPan);
+    // //process audio
+    // inputProcessor.process(buffer);
 }
 
 //==============================================================================
@@ -242,17 +249,3 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new AudioPluginAudioProcessor();
 }
 //===============================================================================
-juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::createParameterLayout()
-{
-    juce::AudioProcessorValueTreeState::ParameterLayout l;
-
-    auto inputs = InputParameters::createParameterGroup();
-    if (inputs != nullptr)
-        l.add(std::move(inputs->group));
-
-    auto outputs = OutputParameters::createParameterGroup();
-    if (outputs != nullptr)
-        l.add(std::move(outputs->group));
-
-    return l;
-}
