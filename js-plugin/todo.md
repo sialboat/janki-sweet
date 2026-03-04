@@ -5,6 +5,10 @@
 - [ ] Reading Brian's Book (1-3) & Math of DFT
 - [ ] Figure out how to test current code
 - [ ] Check if the plugin fucking works
+- [ ] add header files for each section (`utils.h` or a `params.h` etc. etc. so we do not need to include a million
+      things from `Params` or `Utils`). We would have to rewrite a lot of includes though I think.
+- [ ] Vectorize (as in the `std::vector` data structure, not the Linear Algebra primitive) the GUIComponents within
+      `PluginEditor.h`
 - [x] Input and Output sections
   - [x] Input Gain knob and meter
   - [x] Panning DSP Processor
