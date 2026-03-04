@@ -5,7 +5,7 @@
 
 
 //font class
-#include <JuceHeader.h>
+#include <juce_gui_basics/juce_gui_basics.h>
 class Fonts
 {
 public:

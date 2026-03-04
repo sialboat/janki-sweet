@@ -26,7 +26,7 @@ class clipper
     float process(float in);                                        // processes the incoming sample based on the clipping rule
 
     void set_mode(CLIP_MODES mode) { rule = mode; }
-    CLIP_MODES get_mode() { return mode; }
+    CLIP_MODES get_mode() { return rule; }
 
     private:
     float process_soft(float in);                                   // applies a tanh(in) function to the audio if audio >= 1.0f

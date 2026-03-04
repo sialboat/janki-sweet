@@ -29,7 +29,8 @@ class BaseParamWrapper
 {
     public:
 
-    /* initialize the Parameter and by linking the parameter values within the object
+    /* 
+        initialize the Parameter and by linking the parameter values within the object
         to the assigned parameter in the APVTS.
     */
     virtual void init(juce::AudioProcessorValueTreeState& apvts) = 0;
@@ -70,7 +71,7 @@ class BaseParamWrapper
 template <typename PARAM, typename T>
 class ParamWrapper : public BaseParamWrapper
 {
-    protected:
+    public:
     ParamWrapper(PARAM* _param,  const juce::ParameterID& _paramID, T init)
     : param(_param), paramID(_paramID), initValue(init), value(init) {}
 
@@ -98,7 +99,7 @@ class ParamWrapper : public BaseParamWrapper
 template <typename PARAM, typename T>
 class SmoothParamWrapper : public BaseParamWrapper
 {
-    protected:
+    public:
     SmoothParamWrapper(PARAM* _param, const juce::ParameterID& _paramID, T init)
     : param(_param), paramID(_paramID), initValue (init), value (init) {}
     
@@ -255,14 +256,13 @@ class FloatGainParamWrapper : public SmoothParamWrapper <juce::AudioParameterFlo
 
 
 
-class FloatExpParamWrapper : public SmoothParamWrapper <juce::AudioParameterFloat, float>
 /*
     FloatExpParameterWrapper
 
     Float ParameterWrapper that is specifically tailored to a custom smoothing function
     that is different from juce::LinearSmoothedFunction.
 */
-class FloatExpParamWrapper : public ParamWrapper<juce::AudioParameterFloat, float>
+class FloatExpParamWrapper : public ParamWrapper <juce::AudioParameterFloat, float>
 {
     public:
     

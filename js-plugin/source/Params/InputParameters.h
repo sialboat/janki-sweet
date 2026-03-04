@@ -7,6 +7,14 @@
 #include "ParameterWrapper.h"
 #include "Parameters.h"
 
+// we utilize this so paramIDs are accessible elsewhere in other parts of the
+// program
+// namespace PARAM_ID
+// {
+//     const juce::ParameterID inputGainParamID {"inputGain", 1};
+//     const juce::ParameterID inputPanParamID {"inputPan", 1};
+// };
+
 /*
     PARAMS struct that contains static references to all 
     AudioParameterWrappers used within this parameters class.
@@ -38,11 +46,11 @@ class InputParameters : public Parameters
     
     static std::unique_ptr<PARAMS> createParameterGroup();
     
-    // Boilerplate JUCE function for something I don't remember off the top of my head
-    void prepareToPlay(int samplesPerBlockExpected, double sampleRate = 0.05) override;
-
     // Resets the parameter to the default value (upon double-clicking)
     void reset() override;
+
+    // Boilerplate JUCE function for something I don't remember off the top of my head
+    void prepareToPlay(int samplesPerBlockExpected, double sampleRate = 0.05) override;
 
     // How to change parameters upon updating them
     void update() override;

@@ -37,21 +37,23 @@ std::unique_ptr<PARAMS> InputParameters::createParameterGroup()
 }
 
 /*
+Resets a parameter if it was double-clicked on.
+*/
+void InputParameters::reset()
+{
+    inputParams.inGainParam->reset();
+    inputParams.panParam->reset();
+}
+
+/*
     some juce boilerplate that I forgot what it does
 */
 void InputParameters::prepareToPlay(int sampleRate, double duration)
 {
     inputParams.inGainParam->prepareToPlay(sampleRate, duration);
     inputParams.panParam->prepareToPlay(sampleRate, duration);
-}
 
-/*
-    Resets a parameter if it was double-clicked on.
-*/
-void InputParameters::reset()
-{
-    inputParams.inGainParam->reset();
-    inputParams.panParam->reset();
+    reset(); // set params to default value
 }
 
 /*

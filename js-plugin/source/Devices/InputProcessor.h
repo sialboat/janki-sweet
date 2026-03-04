@@ -7,9 +7,13 @@
 // #include <JuceHeader.h>
 #include <juce_audio_basics/juce_audio_basics.h>
 #include "AudioDevice.h"
+#include "Utils/Measurement.h"
 #include "Params/InputParameters.h"
 #include "le-janky/gain.h"
 #include "le-janky/panning.h"
+
+#define INPUT_INDEX 0
+#define OUTPUT_INDEX 1
 
 /*
     InputProcessor
@@ -30,6 +34,10 @@ class InputProcessor : public AudioDevice
     void prepare(double sampleRate, int samplesPerBlockExpected) override;
     void process(juce::AudioBuffer<float>& in) override;
 
+    // Adding this so we can access input measurement levels
+    const Measurement& left() const noexcept { return levelL; }
+    const Measurement& right() const noexcept { return levelR; }
+
     private:
     // we don't rlly need these because the parameters are stored in the AudioParameters
     // encapsulated by the AudioParameterWrapper. The updates will be called by an update()
@@ -38,6 +46,7 @@ class InputProcessor : public AudioDevice
     float inputPan = 0.0f; //[-1,1] smoothed
     gain gainEffect;
     panner panEffect;
+    Measurement levelL, levelR;
 };
 
 #endif

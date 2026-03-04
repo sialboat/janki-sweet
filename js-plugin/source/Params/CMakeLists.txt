@@ -2,12 +2,14 @@ cmake_minimum_required(VERSION 3.22)
 
 set(PARAM_SOURCES
     InputParameters.cpp
+    OutputParameters.cpp
 )
 
 set(PARAM_HEADERS
     Parameters.h
     ParameterWrapper.h
     InputParameters.h
+    OutputParameters.h
 )
 
 

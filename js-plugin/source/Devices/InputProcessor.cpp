@@ -12,6 +12,8 @@ void InputProcessor::prepare([[maybe_unused]]double sampleRate, [[maybe_unused]]
     juce::ignoreUnused(sampleRate, samplePerBlockExpected);
     gainEffect.reset();
     panEffect.reset();
+    levelL.reset();
+    levelR.reset();
 }
 
 /*
@@ -34,6 +36,7 @@ void InputProcessor::process(juce::AudioBuffer<float>& in)
     // the code holy shit my cs classes are teaching me things
     auto* left = in.getWritePointer(0);
     auto* right = in.getWritePointer(1);
+    float maxL = 0.0f, maxR = 0.0f;
     size_t numSamples = in.getNumSamples(); // num samples per channel
     for(size_t i = 0; i < numSamples; ++i)
     {
@@ -42,6 +45,10 @@ void InputProcessor::process(juce::AudioBuffer<float>& in)
         right[i] = gainEffect.process(right[i]); // so we do it twice
         //then pan
         panEffect.process(left[i], right[i]); // for two samples
+        maxL = std::max(left[i], maxL);
+        maxR = std::max(right[i], maxR);
     }
+    levelL.updateIfGreater(maxL);
+    levelR.updateIfGreater(maxR);
     // to_process = panEffect.process(to_process);
 }

@@ -74,6 +74,11 @@ juce_generate_juce_header(JANKI_SWEET)
 # linked automatically. If we'd generated a binary data target above, we would need to link to it
 # here too. This is a standard CMake command.
 
+# this is here so we can link juce headers to other subdirectories and not have to get the fucking
+# linker errors from CMake saying that we can't find the stupid bitchass JuceHeader file
+# add extra juce modules when needed and then link them within the smaller CMakeLists.txt when needed
+# and then use the modules headers (#include <juce_audio_utils/juce_audio_utils.h>) instead of
+# #include <JuceHeader.h>
 add_library(JUCE_HEADERS INTERFACE)
 target_link_libraries(JUCE_HEADERS INTERFACE
     juce::juce_audio_utils
@@ -126,10 +131,12 @@ add_subdirectory(source/le-janky)
 add_subdirectory(source/GUI)
 add_subdirectory(source/Params)
 add_subdirectory(source/Devices)
+add_subdirectory(source/Components)
 # target_include_directories(JANKI_SWEET
 #     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/source
 # )
 target_link_libraries(JANKI_SWEET PRIVATE PARAMS)
+target_link_libraries(JANKI_SWEET PRIVATE COMPONENTS)
 
 # In case we wanted to add pictures or media we will throw it in assets
 file(GLOB_RECURSE Assets "${CMAKE_CURRENT_SOURCE_DIR}/assets/*.*")

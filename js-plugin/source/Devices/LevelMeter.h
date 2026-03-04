@@ -6,7 +6,7 @@
 // #include <JuceHeader.h>
 #include <juce_audio_processors/juce_audio_processors.h>
 #include <juce_graphics/juce_graphics.h>
-#include "Measurement.h"
+#include "Utils/Measurement.h"
 #include "GUI/Themes.h"
 
 class LevelMeter : public juce::Component,
@@ -14,6 +14,7 @@ class LevelMeter : public juce::Component,
 {
     public:
     LevelMeter(Measurement& left, Measurement& right);
+    LevelMeter(const Measurement& l, const Measurement& r);
     ~LevelMeter() override;
 
     void paint(juce::Graphics&) override;

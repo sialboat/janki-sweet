@@ -3,6 +3,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+
+
 //==============================================================================
 AudioPluginAudioProcessor::AudioPluginAudioProcessor()
      : AudioProcessor (BusesProperties()
@@ -16,9 +18,15 @@ AudioPluginAudioProcessor::AudioPluginAudioProcessor()
                     //    inputParameters(apvts)
 {
     // add this to push each parameter submodule to the vector
-    inputProcessor = InputProcessor();
+    // inputProcessor = InputProcessor();
+
+    // push back the parameters for the apvts
     parameters.push_back(std::make_unique<InputParameters>(apvts));
-    
+    parameters.push_back(std::make_unique<OutputParameters>(apvts));
+
+    // push back the processors
+    processors.push_back(std::make_unique<InputProcessor>(parameters.at(INPUT_INDEX)));
+    processors.push_back(std::make_unique<OutputProcessor>(parameters.at(OUTPUT_INDEX)));
     // inputParameters = std::make_unique<InputParameters>(apvts);
     // inputParams = InputParameters(apvts);
 }
@@ -103,6 +111,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout AudioPluginAudioProcessor::c
     if(inputs != nullptr)
         l.add(std::move(inputs->group));
 
+    auto outputs = OutputParameters::createParameterGroup();
+    if(outputs != nullptr)
+        l.add(std::move(inputs->group));
+
     return l;
 }
 
@@ -164,20 +176,25 @@ void AudioPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     // when they first compile a plugin, but obviously you don't need to keep
     // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
-    buffer.clear (i, 0, buffer.getNumSamples());
+        buffer.clear (i, 0, buffer.getNumSamples());
     
+    // run through each processor and process based on the juce::AudioBuffer<float> buffer
+    for(auto p : processors)
+        p.process(buffer);
+
+
     // This is the place where you'd normally do the guts of your plugin's
     // audio processing...
     // Make sure to reset the state if your inner loop is processing
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
-        juce::ignoreUnused (channelData);        
-        // ..do something to the data...
-    }
+    // for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    // {
+    //     auto* channelData = buffer.getWritePointer (channel);
+    //     juce::ignoreUnused (channelData);        
+    //     // ..do something to the data...
+    // }
     
     //input parameter smooth
     for (auto& p : parameters){

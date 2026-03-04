@@ -1,6 +1,6 @@
 # this has yet to exist but the folder will house our other random devices
 
-# cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.22)
 
 set(AUDIO_DEVICES_SOURCES
     InputProcessor.cpp

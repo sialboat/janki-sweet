@@ -17,12 +17,12 @@
 class MultiStateButton : public juce::TextButton
 {
     public:
-    MultiStateButton(juce::AudioProcessorValueTreeState& _apvts, const juce::ParamID _paramID,
+    MultiStateButton(juce::AudioProcessorValueTreeState& _apvts, const juce::String& _paramID,
          const juce::StringArray _choices) : choices(_choices), choiceIndex(0),
-         buttonAttachment(_apvts, _paramID, this)
+         buttonAttachment(_apvts, _paramID, *this)
     {
         setButtonText(choices[choiceIndex]);
-        onClick = [this] { cycleStates(); }
+        onClick = [this] { cycleStates(); };
     }
 
     private:

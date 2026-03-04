@@ -7,13 +7,24 @@
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "ParameterWrapper.h"
 #include "Parameters.h"
+#include <cmath>            // I think this is needed for std::max
+
+// namespace PARAM_ID
+// {
+//     const juce::ParameterID outputGainParamID {"outputGain", 1};
+//     const juce::ParameterID outputPanParamID {"outputPan", 1};
+//     const juce::ParameterID outputMixParamID {"outputMix", 1};
+//     const juce::ParameterID clipModeParamID {"clipMode", 1};
+// };
 
 //output parameters
 struct OUTPUT_PARAMS : public PARAMS{
+    std::unique_ptr<BoolParamWrapper> bypassParam;
+    std::unique_ptr<FloatParamWrapper> outputPan; // [-1, 1]
     std::unique_ptr<FloatGainParamWrapper> outGainParam;
-    std::unique_pts<FloatParamWrapper> mixParam; //0-100%
-    std::unique_pts<ChoiceParamWrapper> clipModeParam; //off/hard/soft
-}
+    std::unique_ptr<FloatParamWrapper> mixParam; //0-100%
+    std::unique_ptr<ChoiceParamWrapper> clipModeParam; //off/hard/soft
+};
 
 /*
     Output Parameters
@@ -25,7 +36,7 @@ class OutputParameters : public Parameters {
     public:
         OutputParameters(juce::AudioProcessorValueTreeState& apvts);
 
-        static std::unique_pts<PARAMS> createParameterGroup();
+        static std::unique_ptr<PARAMS> createParameterGroup();
 
         void prepareToPlay(int samplesPerBlockExpected, double sampleRate = 0.05) override;
         void reset() override;
@@ -33,9 +44,10 @@ class OutputParameters : public Parameters {
         void smoothen() override;
 
         OUTPUT_PARAMS& getOutputParams() {return outputParams;}
+        const juce::StringArray& getClipperModes() const noexcept { return clipperModes; }
     private:
         OUTPUT_PARAMS outputParams;
-        juce::StringArray clipperModes = {"Off", "Hard", "Soft"};
+        static inline juce::StringArray clipperModes = {"Off", "Hard", "Soft"};
         juce::AudioProcessorValueTreeState& apvts;
 };
 

@@ -4,7 +4,9 @@
 #include <vector>
 #include <juce_audio_processors/juce_audio_processors.h>
 #include "Params/InputParameters.h"
+#include "Params/OutputParameters.h"
 #include "Devices/InputProcessor.h"
+#include "Devices/OutputProcessor.h"
 
 //==============================================================================
 class AudioPluginAudioProcessor final : public juce::AudioProcessor
@@ -58,31 +60,32 @@ public:
         if (inputs != nullptr)
             l.add(std::move(inputs->group));
 
-        autio outputs = outputParameters::createParameterGroup();
+        auto outputs = OutputParameters::createParameterGroup();
         if (outputs != nullptr)
             l.add(std::move(outputs->group));
         return l;
         
     }
 
-    float getInputPeak() const noexcept;
-    float getOutputPeak() const noexcept;
+    std::unique_ptr<Parameters> getParameter(size_t i) { return parameters.at(i); }
+    std::unique_ptr<AudioDevice> getAudioDevice(size_t i) { return processors.at(i); }
+
 private:
     juce::AudioProcessorValueTreeState::ParameterLayout layout;
     juce::AudioProcessorValueTreeState apvts;
 
 
-    std::vector<std::unique_ptr<Parameters>> parameters;
+    std::vector<std::unique_ptr<Parameters>> parameters;        // All Parameter Vectors
+    std::vector<std::unique_ptr<AudioDevice>> processors;       // All Processor Vectors
 
     // we will eventually fit all of the special processors in data structures but not this one
     // or the output one and also I'm lazy
-    InputProcessor inputProcessor; 
-    // std::vector<std::unique_ptr<AudioDevice>> processors;
+    // InputProcessor inputProcessor; 
     // std::unique_ptr<InputParameters> inputParameters;
     
 
     //==============================================================================
-    std::atomic<float> inputPeak {0.0f};
-    std::atomic<float> outputPeak {0.0f};
+    // std::atomic<float> inputPeak {0.0f};
+    // std::atomic<float> outputPeak {0.0f};
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioPluginAudioProcessor)
 };

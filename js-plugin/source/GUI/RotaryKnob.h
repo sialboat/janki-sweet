@@ -7,6 +7,7 @@
 
 #define DEFAULT_KNOB_WIDTH 64
 #define DEFAULT_KNOB_HEIGHT 64
+#define DEFAULT_ROTARY_HEIGHT 80
 #define DEFAULT_TEXT_HEIGHT 16
 
 class RotaryKnob : public juce::Component
@@ -17,7 +18,7 @@ class RotaryKnob : public juce::Component
         int knobH = DEFAULT_KNOB_HEIGHT, int textH = DEFAULT_TEXT_HEIGHT);
     ~RotaryKnob() override;
 
-    void resized() override;
+    void resized() override;    
 
     juce::Slider slider;
     juce::Label label;

@@ -7,6 +7,7 @@ set(GUI_SOURCES
 set(GUI_HEADERS
     RotaryKnob.h
     Themes.h
+    MultiStateButton.h
 )
 
 add_library(GUI STATIC
