@@ -80,12 +80,19 @@ private:
     // InputProcessor inputProcessor; 
     // std::unique_ptr<InputParameters> inputParameters;
 
-    
+    /*
+        Creates a parameter object specified by PARAMETER_TYPE
+        and pushes it to the parameter vector.
+    */
     template <typename PARAMETER_TYPE>
     void createAndPushParameters() {
         parameters.push_back(std::make_unique<PARAMETER_TYPE>(apvts));
     }
 
+    /*
+        Creates a Processor object of type PROCESSOR_TYPE using
+        PARAMETER_TYPE and pushes it to the parameter vector.
+    */
     template <typename PARAMETER_TYPE, typename PROCESSOR_TYPE>
     void createAndPushProcessor(size_t i) {
         auto& paramPointer = parameters.at(i);

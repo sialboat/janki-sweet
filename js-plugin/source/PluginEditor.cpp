@@ -50,10 +50,3 @@ void AudioPluginAudioProcessorEditor::resized()
     inputSection.setBounds(10, 10, 200, 260);
     outputSection.setBounds(inputSection.getRight() + 10, 10, 200, 260);
 }
-
-// don't think we need this anymore
-// void AudioPluginAudioProcessorEditor::timerCallback()
-// {
-//     // temporary until meter wiring is done
-//     repaint();
-// }

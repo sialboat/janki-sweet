@@ -40,8 +40,9 @@ class Parameters : public base_param
     virtual void update() override = 0;
     virtual void smoothen() override = 0;
 
-    virtual ~Parameters() = default;
     Parameters(juce::AudioProcessorValueTreeState& apvts) {}
+    Parameters();
+    virtual ~Parameters() = default;
 };
 
 

@@ -11,18 +11,25 @@
 #include "le-janky/gain.h"
 #include "le-janky/panning.h"
 
+/*
+    OutputProcessor
+
+    Audio Device reducing the DSP components within the Output Processor 
+    (Gain, Bypass, Meters, Pan effect, clipping) to two methods:
+    prepare() and process().
+*/
 class OutputProcessor : public AudioDevice
 {
     public:
     OutputProcessor(OutputParameters& op);
 
+    // Allocate memory and initialize DSP primitives
     void prepare(double sampleRate, int samplesPerBlockExpected) override;
+
+    // process samples within juce::AudioBuffer.
     void process(juce::AudioBuffer<float>& in) override;
 
-    // two consts. exist here, the first one (const Measurement&) says 
-    // "we cannot modify the reference Measurement& being returned"
-    // the second one (left() const) says 
-    // "the function is not allowed to modify Measurement&"
+    // Get the left and right measurement values for passing metering information
     Measurement& left() noexcept { return levelL; }
     Measurement& right() noexcept { return levelR; }
 

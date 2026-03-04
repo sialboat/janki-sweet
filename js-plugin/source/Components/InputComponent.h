@@ -15,7 +15,12 @@
 /*
     InputComponent
 
-    Juce::Component that compiles all of the input-related components.
+    Juce::Component that aggregates all of the input-related components into one
+    Includes
+        - Input Gain Knob
+        - Input Pan Knob
+        - Input Meter
+        - Rectangle Meter Area
 */
 class InputComponent : public GUIComponent
 {

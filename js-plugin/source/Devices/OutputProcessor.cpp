@@ -3,6 +3,9 @@
 OutputProcessor::OutputProcessor(OutputParameters& op) : outputParams(op), gainEffect(),
     panEffect(), clipperEffect() {}
 
+/*
+    Allocate memory and/or initialize DSP primitives
+*/
 void OutputProcessor::prepare(double sampleRate, int samplesPerBlockExpected)
 {
     gainEffect.reset();
@@ -12,6 +15,9 @@ void OutputProcessor::prepare(double sampleRate, int samplesPerBlockExpected)
     levelR.reset();
 }
 
+/*
+    Process samples within juce::AudioBuffer
+*/
 void OutputProcessor::process(juce::AudioBuffer<float>& buffer)
 {
     auto* left = buffer.getWritePointer(0);

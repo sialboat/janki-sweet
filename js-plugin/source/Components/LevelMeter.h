@@ -9,6 +9,11 @@
 #include "Utils/Measurement.h"
 #include "GUI/Themes.h"
 
+/*
+    LevelMeter
+
+    class representing a level meter that displays the relative loudness level.
+*/
 class LevelMeter : public juce::Component,
                    private juce::Timer
 {
